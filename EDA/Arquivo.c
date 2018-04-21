@@ -6,47 +6,78 @@ int main(int argc, char const *argv[]) {
   int i,j,
       linha=0, //contador de linhas.
       coluna=1, // contador de colunas. Iniciado em 1 pois não há ';' final.
-      **mat; //declaração da matriz (ponteiro de ponteiro).
+      **mat, //declaração da matriz (ponteiro de ponteiro).
+      **submat; //declaração da submatriz do ilbp.
 
   char letra;
   FILE *arquivo;
   arquivo = fopen("test.txt", "r");
 
-//verifica se o arquivo está vazio.
+  //Verifica se o arquivo está vazio.
   if(arquivo == NULL){
      printf("Erro: arquivo em branco!\n");
   }
 
-while((letra=fgetc(arquivo))!=EOF){
-      if (letra=='\n'){
-        linha++;
-      }
-      else if (linha==1 && letra == ';'){
-        coluna++;
-      }
+  //Determina o número de linhas e colunas.
+  while((letra=fgetc(arquivo))!=EOF){
+        if (letra=='\n'){
+          linha++;
+        }
+        else if (linha==1 && letra == ';'){
+          coluna++;
+        }
   }
 
-rewind(arquivo);
+  //retorna o ponteiro do arquivo para o início. Sem isso vai dar erro.
+  rewind(arquivo);
 
+  //aloca as linhas da matriz de ponteiros
   mat = (int**)malloc(linha*sizeof(int *));
-  for(i = 0; i<linha; i++){
-    *(mat+i) = (int*)malloc(coluna*sizeof(int));}
 
-    for (i=0;i<linha;i++){
-      for (j=0;j<coluna;j++){
-         fscanf(arquivo,"%d%c", (*(mat+i)+j),&letra);
-      }
+  //aloca as colunas da matriz de ponteiros
+  for(i = 0; i<linha; i++)
+    *(mat+i) = (int*)malloc(coluna*sizeof(int));
+
+  //salva o arquivo na matriz de ponteiros
+  for (i=0;i<linha;i++){
+        for (j=0;j<coluna;j++){
+           fscanf(arquivo,"%d%c", (*(mat+i)+j),&letra);
+        }
+  }
+//imprime a matriz na tela
+  for (i=0;i<linha;i++){
+    for (j=0;j<coluna;j++){
+      printf(" %d", *(*(mat+i)+j));
+    }
+        printf("\n");
   }
 
-    for (i=0;i<linha;i++){
-      for (j=0;j<coluna;j++){
-        printf(" %d", *(*(mat+i)+j));
+  //ilbp
+  for (i=1;i<linha;i++){
+    for (j=1;j<coluna;j++){
+      double media=0;
+      for (int i2=-1;i2<2;i2++){
+        for (int j2 = -1; j2<2; j2++){
+          media+= *(*(mat+i)+j);
+
+          //lembrar de transformar tudo até a parte demarcada em uma função
+
+          //até aqui
+        }
       }
-      printf("\n");
+      //aqui idem
+      submat = (int**)calloc(3,sizeof(int *));
+      for(i = 0; i<3; i++)
+        *(submat+i) = (int*)calloc(3,sizeof(int));
+
+      if (*(*(mat+i)+j)> media)
+        *(*(submat+i)+j) = 1;
+
+      //até aqui
+    }
   }
 
-
-//Lembrar de liberar a memória da matriz (free)
+  //Lembrar de liberar a memória da matriz (free)
   printf("Linhas: %d \n Colunas: %d", i,j);
   fclose(arquivo);
 
