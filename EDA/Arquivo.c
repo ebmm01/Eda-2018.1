@@ -7,7 +7,8 @@ int main(int argc, char const *argv[]) {
       linha=0, //contador de linhas.
       coluna=1, // contador de colunas. Iniciado em 1 pois não há ';' final.
       **mat, //declaração da matriz (ponteiro de ponteiro).
-      **submat; //declaração da submatriz do ilbp.
+      **submat, //declaração da submatriz do ilbp.
+      **vetresultante; //vetor resultante.
 
   char letra;
   FILE *arquivo;
@@ -38,6 +39,11 @@ int main(int argc, char const *argv[]) {
   for(i = 0; i<linha; i++)
     *(mat+i) = (int*)malloc(coluna*sizeof(int));
 
+  //alocação da matriz 3x3 submat que será usada no ilbp.
+  submat = (int**)calloc(3,sizeof(int *));
+  for(i = 0; i<3; i++)
+    *(submat+i) = (int*)calloc(3,sizeof(int));
+
   //salva o arquivo na matriz de ponteiros
   for (i=0;i<linha;i++){
         for (j=0;j<coluna;j++){
@@ -53,12 +59,12 @@ int main(int argc, char const *argv[]) {
   }
 
   //ilbp
-  for (i=1;i<linha;i++){
-    for (j=1;j<coluna;j++){
+  for (i=1;i<linha-1;i++){
+    for (j=1;j<coluna-1;j++){
       double media=0;
       for (int i2=-1;i2<2;i2++){
         for (int j2 = -1; j2<2; j2++){
-          media+= *(*(mat+i)+j);
+          media += *(*(mat+(i+i2))+(j+j2));
 
           //lembrar de transformar tudo até a parte demarcada em uma função
 
@@ -66,19 +72,27 @@ int main(int argc, char const *argv[]) {
         }
       }
       //aqui idem
-      submat = (int**)calloc(3,sizeof(int *));
-      for(i = 0; i<3; i++)
-        *(submat+i) = (int*)calloc(3,sizeof(int));
 
-      if (*(*(mat+i)+j)> media)
+
+      if (*(*(mat+i)+j)> (media/9))
         *(*(submat+i)+j) = 1;
 
       //até aqui
+      printf("Média: %f", media);
+
     }
   }
 
+  //imprime a matriz na tela
+    for (i=0;i<linha;i++){
+      for (j=0;j<coluna;j++){
+        printf(" %d", *(*(submat+i)+j));
+      }
+          printf("\n");
+    }
+
   //Lembrar de liberar a memória da matriz (free)
-  printf("Linhas: %d \n Colunas: %d", i,j);
+  printf("Linhas: %d \n Colunas: %d \n", i,j);
   fclose(arquivo);
 
   return 0;
