@@ -50,7 +50,8 @@ int main(int argc, char const *argv[]) {
            fscanf(arquivo,"%d%c", (*(mat+i)+j),&letra);
         }
   }
-//imprime a matriz na tela
+
+  //imprime a matriz na tela
   for (i=0;i<linha;i++){
     for (j=0;j<coluna;j++){
       printf(" %d", *(*(mat+i)+j));
@@ -72,14 +73,30 @@ int main(int argc, char const *argv[]) {
         }
       }
       //aqui idem
+      char *bit = (char *) calloc(9, sizeof (char));
+      for (int i =0; i<3; i++){
+        for(int j=0;j<3;j++){
+          if (*(*(mat+i)+j)> (media/9))
+            *(*(submat+i)+j) = 1;
 
 
-      if (*(*(mat+i)+j)> (media/9))
-        *(*(submat+i)+j) = 1;
 
+        //  bit = (bit + *(*(submat+i)+j));
+
+        }
+      }
+      sprintf (bit, "%s%d",bit, *(*(submat+0)+0));
+      sprintf (bit, "%s%d",bit, *(*(submat+0)+1));
+      sprintf (bit, "%s%d",bit, *(*(submat+0)+2));
+      sprintf (bit, "%s%d",bit, *(*(submat+1)+2));
+      sprintf (bit, "%s%d",bit, *(*(submat+2)+2));
+      sprintf (bit, "%s%d",bit, *(*(submat+2)+1));
+      sprintf (bit, "%s%d",bit, *(*(submat+2)+0));
+      sprintf (bit, "%s%d",bit, *(*(submat+1)+0));
+      sprintf (bit, "%s%d",bit, *(*(submat+1)+1));
+
+      printf("Bit: %s\n",bit);
       //até aqui
-      printf("Média: %f", media);
-
     }
   }
 
