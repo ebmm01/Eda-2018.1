@@ -60,6 +60,7 @@ int main(int argc, char const *argv[]) {
   }
 
   //ilbp
+  int decimal=0;
   for (i=1;i<linha-1;i++){
     for (j=1;j<coluna-1;j++){
       double media=0;
@@ -78,6 +79,8 @@ int main(int argc, char const *argv[]) {
         for(int j=0;j<3;j++){
           if (*(*(mat+i)+j)> (media/9))
             *(*(submat+i)+j) = 1;
+
+
         }
       }
       //concatenador
@@ -91,32 +94,38 @@ int main(int argc, char const *argv[]) {
       sprintf (bit, "%s%d",bit, *(*(submat+1)+0));
       sprintf (bit, "%s%d",bit, *(*(submat+1)+1));
 
-      printf("Bit original: %s\n",bit);
-
+      //verificador de decimal do bit original. Ver o que fazer com isso dps.
+      for (j=0; j<9; j++){
+      if (bit[j] == '1') decimal = decimal * 2 + 1;
+      else if (bit[j] == '0') decimal *= 2;}
+      printf("decimal original: %d\n",decimal);
       //"shiftador".
-        int dec = 0;
+      int dec = 0;
       for (int contador = 0; contador <8; contador ++){
         dec = 0;
         char bit2 = bit[0];
         for (j=0;j<9;j++){
-
-          if (bit[j] == '1') dec = dec * 2 + 1;
-          else if (bit[j] == '0') dec *= 2;
 
 
           if (j==8)
             bit[8]=bit2;
           else
             bit[j]=bit[j+1];
+              //implementar um contador pro bit original tbm
+            if (bit[j] == '1') dec = dec * 2 + 1;
+            else if (bit[j] == '0') dec *= 2;
+
 
 
         }
+        if (decimal>dec )
+          decimal=dec;
 
-
-        printf("%d\n", dec);
         printf("Bit shiftado %d: %s\n",contador+1,bit);
+        printf("%d\n", dec);
       }
       //fim do ilbp
+      printf("O menor decimal é:%d\n", decimal);
     }
   }
 
