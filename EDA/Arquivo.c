@@ -78,13 +78,9 @@ int main(int argc, char const *argv[]) {
         for(int j=0;j<3;j++){
           if (*(*(mat+i)+j)> (media/9))
             *(*(submat+i)+j) = 1;
-
-
-
-        //  bit = (bit + *(*(submat+i)+j));
-
         }
       }
+      //concatenador
       sprintf (bit, "%s%d",bit, *(*(submat+0)+0));
       sprintf (bit, "%s%d",bit, *(*(submat+0)+1));
       sprintf (bit, "%s%d",bit, *(*(submat+0)+2));
@@ -95,8 +91,32 @@ int main(int argc, char const *argv[]) {
       sprintf (bit, "%s%d",bit, *(*(submat+1)+0));
       sprintf (bit, "%s%d",bit, *(*(submat+1)+1));
 
-      printf("Bit: %s\n",bit);
-      //até aqui
+      printf("Bit original: %s\n",bit);
+
+      //"shiftador".
+        int dec = 0;
+      for (int contador = 0; contador <8; contador ++){
+        dec = 0;
+        char bit2 = bit[0];
+        for (j=0;j<9;j++){
+
+          if (bit[j] == '1') dec = dec * 2 + 1;
+          else if (bit[j] == '0') dec *= 2;
+
+
+          if (j==8)
+            bit[8]=bit2;
+          else
+            bit[j]=bit[j+1];
+
+
+        }
+
+
+        printf("%d\n", dec);
+        printf("Bit shiftado %d: %s\n",contador+1,bit);
+      }
+      //fim do ilbp
     }
   }
 
