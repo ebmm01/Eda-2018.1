@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void ilbp(int**, int, int);
+void ilbp(int**,int*, int, int);
 
 int main(int argc, char const *argv[]) {
 
@@ -9,11 +9,11 @@ int main(int argc, char const *argv[]) {
       linha=0, //contador de linhas.
       coluna=1, // contador de colunas. Iniciado em 1 pois não há ';' final.
       **mat, //declaração da matriz (ponteiro de ponteiro).
-      **vetresultante; //vetor resultante.
+      *vetresultante; //vetor resultante.
 
   char letra;
   FILE *arquivo;
-  arquivo = fopen("test.txt", "r");
+  arquivo = fopen("asphalt_01.txt", "r");
 
   //Verifica se o arquivo está vazio.
   if(arquivo == NULL){
@@ -33,12 +33,14 @@ int main(int argc, char const *argv[]) {
   //retorna o ponteiro do arquivo para o início. Sem isso vai dar erro.
   rewind(arquivo);
 
-  //aloca as linhas da matriz de ponteiros
+  //aloca a matriz de ponteiros
   mat = (int**)malloc(linha*sizeof(int *));
-
-  //aloca as colunas da matriz de ponteiros
   for(i = 0; i<linha; i++)
     *(mat+i) = (int*)malloc(coluna*sizeof(int));
+
+  //aloca o vetresultante
+  vetresultante = (int*)malloc(512*sizeof(int));//ele só tem 1 linha por enquanto, mas depois terá 50.
+
 
     //salva o arquivo na matriz de ponteiros
     for (i=0;i<linha;i++){
@@ -56,18 +58,25 @@ int main(int argc, char const *argv[]) {
 
     for (i=1;i<linha-1;i++){
       for (j=1;j<coluna-1;j++){
-        ilbp(mat,i,j);
+        ilbp(mat,vetresultante,i,j);
       }
-    }//fim do ilbp
+    }
 
+    //imprime a matriz na tela
+    for(i =0; i<1;i++){
+      for(j =0; j<512;j++){
+        printf(" %d", *(vetresultante+j));
+      }
+          printf("\n");
+    }
 
-
-
-    //libera as linhas da matriz
+    //libera a matriz mat
     for (i=0;i<linha;i++)
            free(*(mat+i));
 
-    free(mat);    // libera o vetor de ponteiros
+    free(mat);
+
+    free(vetresultante);
 
     printf("Linhas: %d \n Colunas: %d \n", linha,coluna);
     fclose(arquivo);
@@ -75,15 +84,15 @@ int main(int argc, char const *argv[]) {
     return 0;
 }
 
-void ilbp(int **mat,int linha,int coluna){
+void ilbp(int **mat,int *vetresultante,int linha,int coluna){
 
   int decimal=0,i,j,
   contl=0,contc=0;
-       //declaração da submatriz do ilbp.
+
   double media=0;
+
   char submat[3][3],
        bit[9];
-
 
   //contador de média
   for ( i=linha-1 ;i<linha+2;i++){
@@ -91,11 +100,8 @@ void ilbp(int **mat,int linha,int coluna){
       media += *(*(mat+(i))+(j));
     }
   }
-  printf("Posição: %dx%d (%d)\n",linha,coluna, *(*(mat+linha)+coluna));
-  //fim do contador de média.
-  printf("Soma: %f\n Média: %f\n",media, media/9);
 
-  //cria a submatriz e aloca char.
+  //cria a submatriz de vetores( 0 e 1).
   for ( i=linha-1 ;i<linha+2;i++){
     for ( j =coluna-1 ; j<coluna+2; j++){
       if ( *(*(mat+(i))+(j)) > (media/9)){
@@ -108,16 +114,6 @@ void ilbp(int **mat,int linha,int coluna){
     }
   }
 
-  //apagar isso aqui dps
-  for ( i=0 ;i<3;i++){
-    for ( j =0 ; j<3; j++){
-        printf(" %c", submat[i][j]);
-    }
-    printf("\n" );
-  }
-  //apagar
-
-
   //concatenador
   bit[0]=submat[0][0];
   bit[1]=submat[0][1];
@@ -128,14 +124,11 @@ void ilbp(int **mat,int linha,int coluna){
   bit[6]=submat[2][0];
   bit[7]=submat[1][0];
   bit[8]=submat[1][1];
-  //fim do concatenador
 
   //verificador de decimal do bit original. Ver o que fazer com isso dps.
   for (int bitj=0; bitj<9; bitj++){
   if (bit[bitj] == '1') decimal = decimal * 2 + 1;
   else if (bit[bitj] == '0') decimal *= 2;}
-  printf("Bit original: %s\n",bit);
-  printf("decimal original: %d\n",decimal);
 
   //"shiftador".
   int dec = 0;
@@ -159,11 +152,12 @@ void ilbp(int **mat,int linha,int coluna){
     if (decimal>dec )
       decimal=dec;
 
-    printf("Bit shiftado %d: %s\n",contador+1,bit);
-    printf("%d\n", dec);
-
   }//fim do shiftador
-  printf("O menor decimal é:%d\n", decimal); 
 
-
+for(i =0; i<1;i++){
+  for(j =0; j<512;j++){
+    if (j == decimal)
+      (*(vetresultante+j))++;
+  }
+}
 }
