@@ -3,12 +3,13 @@
 #include <time.h>
 
 void rng(char *);
-void ilbp(int**, int, int);
-void manipula_arquivo(FILE **,int , int ,int **, char );
+void ilbp(int**, int**, int, int,int );
+void manipula_arquivo(FILE **,int**,int , int , int ,int **, char );
 
 int main(int argc, char const *argv[]) {
-    int linha,coluna,
-        **mat;
+    int linha,coluna,n=0,
+        **mat,
+        **vetresultante; //vetor resultante.
     FILE *arquivo;
     char fName[50],letra;
 
@@ -21,6 +22,11 @@ for (int i = 1; i < 51; i++) {
     printf("%d ",asfalto[i]);
 }
 
+//alocao vetor resultante
+vetresultante = (int**)malloc(50*sizeof(int *));
+for(int i = 0; i<51; i++)
+  *(vetresultante+i) = (int*)malloc(512*sizeof(int));
+
 //Base de testes
  for (int i = 1; i < 51; i++){
 
@@ -31,6 +37,7 @@ for (int i = 1; i < 51; i++) {
     sprintf(fName,"asphalt/asphalt_%d.txt",asfalto[i]);
 
     arquivo = fopen(fName, "r");
+    n++;
     if (arquivo == NULL)
        {
          printf("Não foi possível abrir o arquivo %s \n",fName);
@@ -48,26 +55,36 @@ for (int i = 1; i < 51; i++) {
           }
         }
         coluna++;
-
+        rewind(arquivo);
         //aloca a matriz de ponteiros
         mat = (int**)malloc(linha*sizeof(int *));
         for(int i = 0; i<linha; i++)
           *(mat+i) = (int*)malloc(coluna*sizeof(int));
-          //libera a matriz mat
 
-          manipula_arquivo(&arquivo,linha, coluna,mat, letra);
 
-    rewind(arquivo);
+          manipula_arquivo(&arquivo, vetresultante, linha,  coluna, n,mat, letra);
+
+
     fclose(arquivo);
     printf("\nArquivo %s \nLinhas: %d \n Colunas: %d \n",fName, linha,coluna);
+    //libera a matriz mat
     for (int i=0;i<linha;i++)
            free(*(mat+i));
 
            free(mat);
 
   }  //fim da base de testes
+  for(int i =0; i<50;i++){
+    for(int j =0; j<512;j++){
+      printf(" %d", *(*(vetresultante+i)+j));
+    }
+        printf("\n");
+  }
+  //libera o vetor resultante
+    for (int i=0;i<50;i++)
+      free(*(vetresultante+i));
 
-
+     free(vetresultante);
 
     return 0;
 
@@ -98,7 +115,7 @@ printf("\n");
 
 }
 
-void ilbp(int **mat,int linha,int coluna){
+void ilbp(int **mat,int **vetresultante,int linha,int coluna,int n){
 
   int decimal=0,i,j,
   contl=0,contc=0;
@@ -167,10 +184,11 @@ void ilbp(int **mat,int linha,int coluna){
       decimal=dec;
 
   }//fim do shiftador
-
+(*(*(vetresultante+n)+decimal))++;
 }
 
-void manipula_arquivo(FILE **arquivo,int linha, int coluna,int **mat, char letra){
+void manipula_arquivo(FILE **arquivo, int **vetresultante,int linha, int coluna, int n, int **mat, char letra){
+
 
   //salva o arquivo na matriz de ponteiros
   for (int i=0;i<linha;i++){
@@ -181,7 +199,7 @@ void manipula_arquivo(FILE **arquivo,int linha, int coluna,int **mat, char letra
   //aplica as métricas ilbp no arquivo
   for (int i=1;i<linha-1;i++){
     for (int j=1;j<coluna-1;j++){
-      ilbp(mat,i,j);
+      ilbp(mat,vetresultante ,i,j,n);
     }
   }
 
