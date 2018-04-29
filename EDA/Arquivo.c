@@ -60,29 +60,27 @@ int main(int argc, char const *argv[]) {
   }
 
   //ilbp
-  int decimal=0;
   for (i=1;i<linha-1;i++){
     for (j=1;j<coluna-1;j++){
+      int decimal=0;
       double media=0;
-      for (int i2=-1;i2<2;i2++){
-        for (int j2 = -1; j2<2; j2++){
-          media += *(*(mat+(i+i2))+(j+j2));
 
-          //lembrar de transformar tudo até a parte demarcada em uma função
-
-          //até aqui
+      //contador de média
+      for (int i2=i -1;i2<i+ 2;i2++){
+        for (int j2 =j -1; j2<j+ 2; j2++){
+          media += *(*(mat+i2)+j2);
         }
-      }
-      //aqui idem
+      }//fim do contador de média.
+
+      //cria a submatriz e aloca char.
       char *bit = (char *) calloc(9, sizeof (char));
-      for (int i =0; i<3; i++){
-        for(int j=0;j<3;j++){
-          if (*(*(mat+i)+j)> (media/9))
-            *(*(submat+i)+j) = 1;
-
-
+      for (int i2=i -1;i2<i+ 2;i2++){
+        for (int j2 =j -1; j2<j+ 2; j2++){
+          if (*(*(mat+i2)+j2) > (media/9))
+            *(*(submat+i2)+j2) = 1;
         }
-      }
+      }//fim do criador da submatriz
+
       //concatenador
       sprintf (bit, "%s%d",bit, *(*(submat+0)+0));
       sprintf (bit, "%s%d",bit, *(*(submat+0)+1));
@@ -93,27 +91,30 @@ int main(int argc, char const *argv[]) {
       sprintf (bit, "%s%d",bit, *(*(submat+2)+0));
       sprintf (bit, "%s%d",bit, *(*(submat+1)+0));
       sprintf (bit, "%s%d",bit, *(*(submat+1)+1));
+      //fim do concatenador
 
       //verificador de decimal do bit original. Ver o que fazer com isso dps.
-      for (j=0; j<9; j++){
-      if (bit[j] == '1') decimal = decimal * 2 + 1;
-      else if (bit[j] == '0') decimal *= 2;}
+      for (int bitj=0; bitj<9; bitj++){
+      if (bit[bitj] == '1') decimal = decimal * 2 + 1;
+      else if (bit[bitj] == '0') decimal *= 2;}
+      printf("Bit original: %s\n",bit);
       printf("decimal original: %d\n",decimal);
+
       //"shiftador".
       int dec = 0;
       for (int contador = 0; contador <8; contador ++){
         dec = 0;
         char bit2 = bit[0];
-        for (j=0;j<9;j++){
+        for (int shiftj=0;shiftj<9;shiftj++){
 
 
-          if (j==8)
+          if (shiftj==8)
             bit[8]=bit2;
           else
-            bit[j]=bit[j+1];
+            bit[shiftj]=bit[shiftj+1];
               //implementar um contador pro bit original tbm
-            if (bit[j] == '1') dec = dec * 2 + 1;
-            else if (bit[j] == '0') dec *= 2;
+            if (bit[shiftj] == '1') dec = dec * 2 + 1;
+            else if (bit[shiftj] == '0') dec *= 2;
 
 
 
@@ -123,22 +124,19 @@ int main(int argc, char const *argv[]) {
 
         printf("Bit shiftado %d: %s\n",contador+1,bit);
         printf("%d\n", dec);
-      }
-      //fim do ilbp
-      printf("O menor decimal é:%d\n", decimal);
-    }
-  }
 
-  //imprime a matriz na tela
-    for (i=0;i<linha;i++){
-      for (j=0;j<coluna;j++){
-        printf(" %d", *(*(submat+i)+j));
-      }
-          printf("\n");
+      }//fim do shiftador
+      printf("O menor decimal é:%d\n", decimal);
+      free(bit);
+
+      printf("Posição: %dx%d (%d)\n",i,j, *(*(mat+i)+j));
+
     }
+  }//fim do ilbp
+
 
   //Lembrar de liberar a memória da matriz (free)
-  printf("Linhas: %d \n Colunas: %d \n", i,j);
+  printf("Linhas: %d \n Colunas: %d \n", linha,coluna);
   fclose(arquivo);
 
   return 0;
