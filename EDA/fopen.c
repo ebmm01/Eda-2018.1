@@ -1,21 +1,23 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <math.h>
 
 void rng(char *);
-void ilbp(int**, int**, int, int,int );
-void manipula_arquivo(FILE **,int**,int , int , int ,int **, char );
+void ilbp(int**, float**, int, int,int );
+void glcm(int **, int, int, int, int, float **, int, int);
+void manipula_arquivo(FILE **,float**,int , int , int ,int **, char );
 
 int main(int argc, char const *argv[]) {
     int linha,coluna,n=0,
-        **mat,
-        **vetresultante; //vetor resultante.
+        **mat;
+    float **vetresultante; //vetor resultante.
     FILE *arquivo;
     char fName[50],letra;
 
     char asfalto[50],grama[50];
 
-rng(asfalto);
+ rng(asfalto);
 
 
 for (int i = 1; i < 51; i++) {
@@ -23,21 +25,21 @@ for (int i = 1; i < 51; i++) {
 }
 
 //alocao vetor resultante
-vetresultante = (int**)malloc(50*sizeof(int *));
+vetresultante = (float**)malloc(50*sizeof(float *));
 for(int i = 0; i<51; i++)
-  *(vetresultante+i) = (int*)malloc(512*sizeof(int));
+  *(vetresultante+i) = (float*)malloc(536*sizeof(float));
 
 //Base de testes
  for (int i = 1; i < 51; i++){
 
    if (asfalto[i]<10)
-    sprintf(fName,"asphalt/asphalt_0%d.txt",asfalto[i]);
+    sprintf(fName,"grass/grass_0%d.txt",asfalto[i]);
 
    else
-    sprintf(fName,"asphalt/asphalt_%d.txt",asfalto[i]);
+    sprintf(fName,"grass/grass_%d.txt",asfalto[i]);
 
     arquivo = fopen(fName, "r");
-    n++;
+
     if (arquivo == NULL)
        {
          printf("Não foi possível abrir o arquivo %s \n",fName);
@@ -62,10 +64,26 @@ for(int i = 0; i<51; i++)
           *(mat+i) = (int*)malloc(coluna*sizeof(int));
 
 
-          manipula_arquivo(&arquivo, vetresultante, linha,  coluna, n,mat, letra);
-
+           manipula_arquivo(&arquivo, vetresultante, linha,  coluna, n,mat, letra);
+           glcm(mat , linha, coluna, 0, -1, vetresultante, 512, n); // esquerda
+           printf("\n");
+           glcm(mat, linha, coluna, 0, +1, vetresultante, 515, n); // direita
+           printf("\n");
+           glcm(mat , linha, coluna, -1, 0, vetresultante, 518, n); // cima
+           printf("\n");
+           glcm(mat , linha, coluna, +1, 0, vetresultante, 521, n); // baixo
+           printf("\n");
+           glcm(mat , linha, coluna, -1, -1, vetresultante, 524, n); // diagonal superior esquerda
+           printf("\n");
+           glcm(mat , linha, coluna, -1, +1, vetresultante, 527, n); // diagonal superior direita
+           printf("\n");
+           glcm(mat , linha, coluna, +1, +1, vetresultante, 530, n); // diagonal inferior direita
+           printf("\n");
+           glcm(mat , linha, coluna, +1, -1, vetresultante, 533, n); // diagonal inferior esquerda
+           printf("\n");
 
     fclose(arquivo);
+    n+=1;
     printf("\nArquivo %s \nLinhas: %d \n Colunas: %d \n",fName, linha,coluna);
     //libera a matriz mat
     for (int i=0;i<linha;i++)
@@ -75,8 +93,8 @@ for(int i = 0; i<51; i++)
 
   }  //fim da base de testes
   for(int i =0; i<50;i++){
-    for(int j =0; j<512;j++){
-      printf(" %d", *(*(vetresultante+i)+j));
+    for(int j =0; j<536;j++){
+      printf(" %.0f", *(*(vetresultante+i)+j));
     }
         printf("\n");
   }
@@ -115,7 +133,7 @@ printf("\n");
 
 }
 
-void ilbp(int **mat,int **vetresultante,int linha,int coluna,int n){
+void ilbp(int **mat,float **vetresultante,int linha,int coluna,int n){
 
   int decimal=0,i,j,
   contl=0,contc=0;
@@ -187,7 +205,7 @@ void ilbp(int **mat,int **vetresultante,int linha,int coluna,int n){
 (*(*(vetresultante+n)+decimal))++;
 }
 
-void manipula_arquivo(FILE **arquivo, int **vetresultante,int linha, int coluna, int n, int **mat, char letra){
+void manipula_arquivo(FILE **arquivo, float **vetresultante,int linha, int coluna, int n, int **mat, char letra){
 
 
   //salva o arquivo na matriz de ponteiros
@@ -202,5 +220,50 @@ void manipula_arquivo(FILE **arquivo, int **vetresultante,int linha, int coluna,
       ilbp(mat,vetresultante ,i,j,n);
     }
   }
+
+}
+
+void glcm(int **img , int L, int C, int pos_lin, int pos_col, float **vetresultante, int pos_freq,int n){
+  int **glcm, i, j, lin_glcm, col_glcm;
+  float energia = 0.0, contraste = 0.0, homogeneidade = 0.0;
+
+  glcm = (int**)calloc(256,sizeof(int *));
+
+  for(i = 0; i<256; i++)                         //declaração da matriz
+    *(glcm+i) = (int*)calloc(256,sizeof(int));
+
+
+    for(i = 1; i<L - 1; i++){
+      for(j = 1; j<C - 1; j++){     //verificar toda a posição da matriz com seus vizinhos
+          lin_glcm = img[i][j];
+          col_glcm = img[i + pos_lin][j + pos_col]; // posição linha e posição coluna define para qual direção o glcm irá indicar cima/baixo/direita/esquerda..
+          *(*(glcm+lin_glcm)+col_glcm) += 1;
+
+        }
+      }
+
+      for (i = 0; i < 256; i++){
+          for (j = 0; j < 256; j++){
+          if(*(*(glcm + i)+ j) >= 1){
+            contraste += (*(*(glcm + i)+ j)) * pow(i - j, 2);    //imprimir onde esta colocando na matriz
+            energia += pow((*(*(glcm + i)+ j)), 2);
+            homogeneidade += (*(*(glcm + i)+ j))/(pow(i - j, 2) + 1);
+          }
+        }
+      }
+
+    energia = sqrt(energia);
+
+    *(*(vetresultante + n)+ pos_freq) = contraste;
+    *(*(vetresultante + n)+ (pos_freq + 1)) = energia;
+    *(*(vetresultante + n)+ (pos_freq + 2)) = homogeneidade;
+
+    printf("Cont: %.0f ener: %.0f homo: %.0f \n", contraste, energia, homogeneidade);
+
+   for (i=0;i<256;i++)       //libera as linhas da matriz
+      free(*(glcm+i));
+
+    free(glcm);    // libera o vetor de ponteiros
+
 
 }
