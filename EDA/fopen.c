@@ -12,130 +12,180 @@ void calcula_media(double **, double*);
 
 int main(int argc, char const *argv[]) {
     int linha,coluna,n=0,
-        **mat;
-    double **vetresultante, //vetor resultante.
-           **vetnormalizado,
-           *vetfinalasfalto;
-    FILE *arquivo;
-    char fName[50],letra;
+        **matAsfalto,
+        **matGrama;
+
+    double **vetresultanteasfalto, //vetor resultante.
+           **vetnormalizadoasfalto,
+           *vetfinalasfalto,
+           **vetresultantegrama, //vetor resultante.
+           **vetnormalizadograma,
+           *vetfinalgrama;
+
+    FILE *arquivoA, *arquivoG;
+    char fNameAsfalto[50],fNameGrama[50],letra;
 
     char asfalto[50],grama[50];
 
- rng(asfalto);
-
+rng(asfalto);
+rng(grama);
 
 for (int i = 1; i < 51; i++) {
     printf("%d ",asfalto[i]);
 }
-
+for (int i = 1; i < 51; i++) {
+    printf("%d ",grama[i]);
+}
 //alocao vetor resultante
-vetresultante = (double**)malloc(50*sizeof(double *));
+vetresultanteasfalto = (double**)malloc(50*sizeof(double *));
 for(int i = 0; i<51; i++)
-  *(vetresultante+i) = (double*)malloc(536*sizeof(double));
+  *(vetresultanteasfalto+i) = (double*)malloc(536*sizeof(double));
+
+vetresultantegrama = (double**)malloc(50*sizeof(double *));
+for(int i = 0; i<51; i++)
+  *(vetresultantegrama+i) = (double*)malloc(536*sizeof(double));
 
 //alocao vetor normalizado
-vetnormalizado = (double**)malloc(50*sizeof(double *));
+vetnormalizadoasfalto = (double**)malloc(50*sizeof(double *));
 for(int i = 0; i<51; i++)
-  *(vetnormalizado+i) = (double*)malloc(536*sizeof(double));
+  *(vetnormalizadoasfalto+i) = (double*)malloc(536*sizeof(double));
+
+vetnormalizadograma = (double**)malloc(50*sizeof(double *));
+for(int i = 0; i<51; i++)
+  *(vetnormalizadograma+i) = (double*)malloc(536*sizeof(double));
 
 //alocao vetor final asfalto
 vetfinalasfalto = (double*)malloc(536*sizeof(double));
+vetfinalgrama = (double*)malloc(536*sizeof(double));
 
 //Base de testes
- for (int i = 1; i < 51; i++){
+ for (int i = 1; i < 26 ; i++){
 
-   if (asfalto[i]<10)
-    sprintf(fName,"asphalt/asphalt_0%d.txt",asfalto[i]);
+   if (asfalto[i]<10 || grama[i]<10){
+    sprintf(fNameAsfalto,"asphalt/asphalt_0%d.txt",asfalto[i]);
+    sprintf(fNameGrama,"grass/grass_0%d.txt",grama[i]);
+  }
+   else if (asfalto[i]>=10 || grama[i]>=10){
+    sprintf(fNameAsfalto,"asphalt/asphalt_%d.txt",asfalto[i]);
+    sprintf(fNameGrama,"grass/grass_%d.txt",grama[i]);
+  }
+    arquivoA = fopen(fNameAsfalto, "r");
+    arquivoG = fopen(fNameGrama, "r");
 
-   else
-    sprintf(fName,"asphalt/asphalt_%d.txt",asfalto[i]);
-
-    arquivo = fopen(fName, "r");
-
-    if (arquivo == NULL)
+    if (arquivoA  == NULL || arquivoG == NULL)
        {
-         printf("Não foi possível abrir o arquivo %s \n",fName);
+        if (arquivoA)
+         printf("Não foi possível abrir o arquivo %s \n",fNameAsfalto);
+        else
+        printf("Não foi possível abrir o arquivo %s \n",fNameGrama);
+
          system("pause");
          exit(1);
        }
   // Processamento de dados
-    linha = coluna = 0;
-    while((letra=fgetc(arquivo))!=EOF){
+    linha = 0, coluna = 1;
+    while((letra=fgetc(arquivoG))!=EOF){
           if (letra=='\n'){
             linha++;
           }
           else if (linha==0 && letra == ';'){
             coluna++;
           }
-        }
-        coluna++;
-        rewind(arquivo);
-        //aloca a matriz de ponteiros
-        mat = (int**)malloc(linha*sizeof(int *));
-        for(int i = 0; i<linha; i++)
-          *(mat+i) = (int*)malloc(coluna*sizeof(int));
+    }
+    while((letra=fgetc(arquivoA))!=EOF){
+          if (letra=='\n'){
+            linha++;
+          }
+          else if (linha==0 && letra == ';'){
+            coluna++;
+          }
+    }
+    rewind(arquivoA);
+    rewind(arquivoG);
+    //aloca a matriz de ponteiros
+    matGrama = (int**)malloc(linha*sizeof(int *));
+    for(int i = 0; i<linha; i++)
+      *(matGrama+i) = (int*)malloc(coluna*sizeof(int));
 
+    //aloca a matriz de ponteiros
+    matAsfalto = (int**)malloc(linha*sizeof(int *));
+    for(int i = 0; i<linha; i++)
+      *(matAsfalto+i) = (int*)malloc(coluna*sizeof(int));
 
-           manipula_arquivo(&arquivo, vetresultante, linha,  coluna, n,mat, letra);
-           glcm(mat , linha, coluna, 0, -1, vetresultante, 512, n); // esquerda
-           printf("\n");
-           glcm(mat, linha, coluna, 0, +1, vetresultante, 515, n); // direita
-           printf("\n");
-           glcm(mat , linha, coluna, -1, 0, vetresultante, 518, n); // cima
-           printf("\n");
-           glcm(mat , linha, coluna, +1, 0, vetresultante, 521, n); // baixo
-           printf("\n");
-           glcm(mat , linha, coluna, -1, -1, vetresultante, 524, n); // diagonal superior esquerda
-           printf("\n");
-           glcm(mat , linha, coluna, -1, +1, vetresultante, 527, n); // diagonal superior direita
-           printf("\n");
-           glcm(mat , linha, coluna, +1, +1, vetresultante, 530, n); // diagonal inferior direita
-           printf("\n");
-           glcm(mat , linha, coluna, +1, -1, vetresultante, 533, n); // diagonal inferior esquerda
-           printf("\n");
-           normaliza(vetresultante, vetnormalizado, n);
-    fclose(arquivo);
+     manipula_arquivo(&arquivoA, vetresultanteasfalto, linha,  coluna, n,matAsfalto, letra);
+     manipula_arquivo(&arquivoG, vetresultantegrama, linha,  coluna, n,matGrama, letra);
+
+     glcm(matAsfalto , linha, coluna, 0, -1, vetresultanteasfalto, 512, n); // esquerda
+     glcm(matGrama , linha, coluna, 0, -1, vetresultantegrama, 512, n); // esquerda
+     printf("\n");
+     glcm(matAsfalto, linha, coluna, 0, +1, vetresultanteasfalto, 515, n); // direita
+     glcm(matGrama, linha, coluna, 0, +1, vetresultantegrama, 515, n); // direita
+     printf("\n");
+     glcm(matAsfalto , linha, coluna, -1, 0, vetresultanteasfalto, 518, n); // cima
+     glcm(matGrama , linha, coluna, -1, 0, vetresultantegrama, 518, n); // cima
+     printf("\n");
+     glcm(matAsfalto , linha, coluna, +1, 0, vetresultanteasfalto, 521, n); // baixo
+     glcm(matGrama , linha, coluna, +1, 0, vetresultantegrama, 521, n); // baixo
+     printf("\n");
+     glcm(matAsfalto , linha, coluna, -1, -1, vetresultanteasfalto, 524, n); // diagonal superior esquerda
+     glcm(matGrama , linha, coluna, -1, -1, vetresultantegrama, 524, n); // diagonal superior esquerda
+     printf("\n");
+     glcm(matAsfalto , linha, coluna, -1, +1, vetresultanteasfalto, 527, n); // diagonal superior direita
+     glcm(matGrama , linha, coluna, -1, +1, vetresultantegrama, 527, n); // diagonal superior direita
+     printf("\n");
+     glcm(matAsfalto , linha, coluna, +1, +1, vetresultanteasfalto, 530, n); // diagonal inferior direita
+     glcm(matGrama , linha, coluna, +1, +1, vetresultantegrama, 530, n); // diagonal inferior direita
+     printf("\n");
+     glcm(matAsfalto , linha, coluna, +1, -1, vetresultanteasfalto, 533, n); // diagonal inferior esquerda
+     glcm(matGrama , linha, coluna, +1, -1, vetresultantegrama, 533, n); // diagonal inferior esquerda
+     printf("\n");
+     normaliza(vetresultanteasfalto, vetnormalizadoasfalto, n);
+     normaliza(vetresultantegrama, vetnormalizadograma, n);
+
+     fclose(arquivoA);
+     fclose(arquivoG);
+
     n+=1;
-    printf("\nArquivo %s \nLinhas: %d \n Colunas: %d \n",fName, linha,coluna);
-    //libera a matriz mat
-    for (int i=0;i<linha;i++)
-           free(*(mat+i));
 
-           free(mat);
+    printf("\nArquivo %s \nLinhas: %d \n Colunas: %d \n",fNameAsfalto, linha,coluna);
+    printf("\nArquivo %s \nLinhas: %d \n Colunas: %d \n",fNameGrama, linha,coluna);
+    //libera a matriz mat
+    for (int i=0;i<linha;i++){
+           free(*(matAsfalto+i));
+           free(*(matGrama+i));
+    }
+           free(matAsfalto);
+           free(matGrama);
 
   }  //fim da base de testes
 
-
-  for(int i =0; i<50;i++){
-    for(int j =0; j<536;j++){
-      printf(" %.lf", *(*(vetresultante+i)+j));
-    }
-        printf("\n");
-  }
   printf("Normalizando ...\n" );
   printf("Normalizando ...\n" );
   printf("Normalizando ...\n" );
   printf("Normalizando ...\n" );
 
+calcula_media(vetnormalizadoasfalto,vetfinalasfalto);
+calcula_media(vetnormalizadograma,vetfinalgrama);
 
-for(int i =0; i<50;i++){
-  for(int j =0; j<536;j++){
-    printf(" %.lf", *(*(vetnormalizado+i)+j));
-  }
-      printf("\n");
+//libera o vetor resultante
+for (int i=0;i<50;i++){
+  free(*(vetresultanteasfalto+i));
+  free(*(vetresultantegrama+i));
 }
-calcula_media(vetnormalizado,vetfinalasfalto);
-  //libera o vetor resultante
-    for (int i=0;i<50;i++)
-      free(*(vetresultante+i));
+free(vetresultanteasfalto);
+free(vetresultantegrama);
 
-     free(vetresultante);
+ //libera o vetor normalizado
+ for (int i=0;i<50;i++){
+  free(*(vetnormalizadoasfalto+i));
+  free(*(vetnormalizadograma+i));
+}
+ free(vetnormalizadoasfalto);
+ free(vetnormalizadograma);
 
-     //libera o vetor final
-       for (int i=0;i<50;i++)
-         free(*(vetnormalizado+i));
-
-        free(vetnormalizado);
+  //libera o vetor final
+  free(vetfinalasfalto);
+  free(vetfinalgrama);
 
     return 0;
 
@@ -166,7 +216,7 @@ printf("\n");
 
 }
 
-void ilbp(int **mat,double **vetresultante,int linha,int coluna,int n){
+void ilbp(int **mat,double **vetresul,int linha,int coluna,int n){
 
   int decimal=0,i,j,
   contl=0,contc=0;
@@ -235,10 +285,10 @@ void ilbp(int **mat,double **vetresultante,int linha,int coluna,int n){
       decimal=dec;
 
   }//fim do shiftador
-(*(*(vetresultante+n)+decimal))++;
+(*(*(vetresul+n)+decimal))++;
 }
 
-void manipula_arquivo(FILE **arquivo, double **vetresultante,int linha, int coluna, int n, int **mat, char letra){
+void manipula_arquivo(FILE **arquivo, double **vetresul,int linha, int coluna, int n, int **mat, char letra){
 
 
   //salva o arquivo na matriz de ponteiros
@@ -250,13 +300,13 @@ void manipula_arquivo(FILE **arquivo, double **vetresultante,int linha, int colu
   //aplica as métricas ilbp no arquivo
   for (int i=1;i<linha-1;i++){
     for (int j=1;j<coluna-1;j++){
-      ilbp(mat,vetresultante ,i,j,n);
+      ilbp(mat,vetresul ,i,j,n);
     }
   }
 
 }
 
-void glcm(int **img , int L, int C, int pos_lin, int pos_col, double **vetresultante, int pos_freq,int n){
+void glcm(int **img , int L, int C, int pos_lin, int pos_col, double **vetresul, int pos_freq,int n){
   int **glcm, i, j, lin_glcm, col_glcm;
   double energia = 0.0, contraste = 0.0, homogeneidade = 0.0;
 
@@ -287,9 +337,9 @@ void glcm(int **img , int L, int C, int pos_lin, int pos_col, double **vetresult
 
     energia = sqrt(energia);
 
-    *(*(vetresultante + n)+ pos_freq) = contraste;
-    *(*(vetresultante + n)+ (pos_freq + 1)) = energia;
-    *(*(vetresultante + n)+ (pos_freq + 2)) = homogeneidade;
+    *(*(vetresul + n)+ pos_freq) = contraste;
+    *(*(vetresul + n)+ (pos_freq + 1)) = energia;
+    *(*(vetresul + n)+ (pos_freq + 2)) = homogeneidade;
 
     printf("Cont: %.0lf ener: %.0lf homo: %.0lf \n", contraste, energia, homogeneidade);
 
@@ -300,27 +350,27 @@ void glcm(int **img , int L, int C, int pos_lin, int pos_col, double **vetresult
 
 
 }
-void normaliza(double **vetresultante, double **vetnormalizado, int n){
+void normaliza(double **vetresul, double **vetnormalizadoasfalto, int n){
   int i = 0;
   double menor = 999999999, maior = 0;
 
     for(i = 0; i < 536; i++){
-      if(*(*(vetresultante + n)+ i) > maior){
-          maior = *(*(vetresultante + n)+ i);
+      if(*(*(vetresul + n)+ i) > maior){
+          maior = *(*(vetresul + n)+ i);
       }
-      if(*(*(vetresultante + n)+ i) < menor){
-        menor = *(*(vetresultante + n)+ i);
+      if(*(*(vetresul + n)+ i) < menor){
+        menor = *(*(vetresul + n)+ i);
       }
 
     }
     for(i = 0; i < 536; i++){
-      *(*(vetnormalizado + n)+ i) = (*(*(vetresultante + n)+ i) - menor) / (maior - menor);
+      *(*(vetnormalizadoasfalto + n)+ i) = (*(*(vetresul + n)+ i) - menor) / (maior - menor);
     }
     printf("Menor: %f\n Maior: %f\n", menor, maior );
 
 }
 
-void calcula_media(double **vetnormalizado, double *vetfinalasfalto){
+void calcula_media(double **vetnormalizadoasfalto, double *vetfinalasfalto){
   int i,j=0;
   double *media;
 
@@ -328,7 +378,7 @@ void calcula_media(double **vetnormalizado, double *vetfinalasfalto){
 
   for(i=0;i<50;i++){
     for(j=0;j<536;j++){
-      *(media+j) += (*(*(vetnormalizado + i)+ j));
+      *(media+j) += (*(*(vetnormalizadoasfalto + i)+ j));
     }
   }
 
