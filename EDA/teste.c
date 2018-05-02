@@ -11,9 +11,10 @@ void glcm(int **, int, int, int, int, double **, int, int);
 void manipula_arquivo(FILE **,double**,int , int , int ,int **, char );
 void normaliza(double **, double **,  int);
 void calcula_media(double **, double*);
+double dis_eucl(double *);
 
 int main(int argc, char const *argv[]) {
-    int linha,coluna,n=0,
+    int linhagrama,colunagrama,linhasfalto,colunasfalto,n=0,
         **matAsfalto,
         **matGrama;
 
@@ -22,18 +23,24 @@ int main(int argc, char const *argv[]) {
            *vetfinalasfalto,
            **vetresultantegrama, //vetor resultante.
            **vetnormalizadograma,
-           *vetfinalgrama;
+           *vetfinalgrama,
+           dist_media_grama,
+           dist_media_aspha,
+           dist_vet_grama[25],
+           dist_vet_aspha[25],
+           taxa_acerto,
+           taxa_falsa_aceitacao,
+           taxa_falsa_rejeicao;
 
     FILE *arquivoA, *arquivoG;
     char fNameAsfalto[50],fNameGrama[50],letra;
 
     char asfalto[50],grama[50];
 
-rng(asfalto);
+    rng(asfalto);
+    usleep(1000000);
+    rng(grama);
 
-for (int i = 1; i < 51; i++) {
-    printf("%d ",asfalto[i]);
-}
 
 //alocao vetor resultante
 vetresultanteasfalto = (double**)malloc(50*sizeof(double *));
@@ -57,131 +64,98 @@ for(int i = 0; i<51; i++)
 vetfinalasfalto = (double*)malloc(536*sizeof(double));
 vetfinalgrama = (double*)malloc(536*sizeof(double));
 
-
 //Base de testes asfalto
  for (int i = 1; i < 51; i++){
 
    if (asfalto[i]<10)
    sprintf(fNameAsfalto,"asphalt/asphalt_0%d.txt",asfalto[i]);
-
-   else
+   if (asfalto[i]>=10)
    sprintf(fNameAsfalto,"asphalt/asphalt_%d.txt",asfalto[i]);
-
-    arquivoA = fopen(fNameAsfalto, "r");
-
-    if (arquivoA == NULL)
-       {
-         printf("Não foi possível abrir o arquivo %s \n",fNameAsfalto);
-         system("pause");
-         exit(1);
-       }
-  // Processamento de dados
-    linha = coluna = 0;
-    while((letra=fgetc(arquivoA))!=EOF){
-          if (letra=='\n'){
-            linha++;
-          }
-          else if (linha==0 && letra == ';'){
-            coluna++;
-          }
-        }
-        coluna++;
-        rewind(arquivoA);
-        //aloca a matriz de ponteiros
-        matAsfalto = (int**)malloc(linha*sizeof(int *));
-        for(int i = 0; i<linha; i++)
-          *(matAsfalto+i) = (int*)malloc(coluna*sizeof(int));
-
-
-           manipula_arquivo(&arquivoA, vetresultanteasfalto, linha,  coluna, n,matAsfalto, letra);
-           glcm(matAsfalto , linha, coluna, 0, -1, vetresultanteasfalto, 512, n); // esquerda
-           printf("\n");
-           glcm(matAsfalto, linha, coluna, 0, +1, vetresultanteasfalto, 515, n); // direita
-           printf("\n");
-           glcm(matAsfalto , linha, coluna, -1, 0, vetresultanteasfalto, 518, n); // cima
-           printf("\n");
-           glcm(matAsfalto , linha, coluna, +1, 0, vetresultanteasfalto, 521, n); // baixo
-           printf("\n");
-           glcm(matAsfalto , linha, coluna, -1, -1, vetresultanteasfalto, 524, n); // diagonal superior esquerda
-           printf("\n");
-           glcm(matAsfalto , linha, coluna, -1, +1, vetresultanteasfalto, 527, n); // diagonal superior direita
-           printf("\n");
-           glcm(matAsfalto , linha, coluna, +1, +1, vetresultanteasfalto, 530, n); // diagonal inferior direita
-           printf("\n");
-           glcm(matAsfalto , linha, coluna, +1, -1, vetresultanteasfalto, 533, n); // diagonal inferior esquerda
-           printf("\n");
-           normaliza(vetresultanteasfalto, vetnormalizadoasfalto, n);
-    fclose(arquivoA);
-    n+=1;
-    printf("\nArquivo %s (%d)\nLinhas: %d \n Colunas: %d \n",fNameAsfalto,i, linha,coluna);
-    //libera a matriz mat
-    for (int i=0;i<linha;i++)
-           free(*(matAsfalto+i));
-
-           free(matAsfalto);
-
-  }  //fim da base de testes
-rng(grama);
-//Base de testes grama
- for (int i = 1; i < 51; i++){
-
    if (grama[i]<10)
    sprintf(fNameGrama,"grass/grass_0%d.txt",grama[i]);
-
-   else
+   if (grama[i]>=10)
    sprintf(fNameGrama,"grass/grass_%d.txt",grama[i]);
 
+    arquivoA = fopen(fNameAsfalto, "r");
     arquivoG = fopen(fNameGrama, "r");
 
-    if (arquivoG == NULL)
+    if (arquivoG == NULL || arquivoA == NULL)
        {
+         if (arquivoA == NULL)
+         printf("Não foi possível abrir o arquivo %s \n",fNameAsfalto);
+         else
          printf("Não foi possível abrir o arquivo %s \n",fNameGrama);
+
          system("pause");
          exit(1);
        }
+
   // Processamento de dados
-    linha = coluna = 0;
+    linhasfalto=linhagrama = 0,
+    colunasfalto =  colunagrama = 1;
+
+    while((letra=fgetc(arquivoA))!=EOF){
+      if (letra=='\n'){
+        linhasfalto++;
+      }
+      else if (linhasfalto==0 && letra == ';'){
+        colunasfalto++;
+      }
+    }
+
     while((letra=fgetc(arquivoG))!=EOF){
-          if (letra=='\n'){
-            linha++;
-          }
-          else if (linha==0 && letra == ';'){
-            coluna++;
-          }
-        }
-        coluna++;
-        rewind(arquivoG);
-        //aloca a matriz de ponteiros
-        matGrama = (int**)malloc(linha*sizeof(int *));
-        for(int i = 0; i<linha; i++)
-          *(matGrama+i) = (int*)malloc(coluna*sizeof(int));
+      if (letra=='\n'){
+        linhagrama++;
+      }
+      else if (linhagrama==0 && letra == ';'){
+        colunagrama++;
+      }
+    }
+    rewind(arquivoG);
+    rewind(arquivoA);
 
-           manipula_arquivo(&arquivoG, vetresultantegrama, linha,  coluna, i,matGrama, letra);
-           glcm(matGrama , linha, coluna, 0, -1, vetresultantegrama, 512, i); // esquerda
-           printf("\n");
-           glcm(matGrama, linha, coluna, 0, +1, vetresultantegrama, 515, i); // direita
-           printf("\n");
-           glcm(matGrama , linha, coluna, -1, 0, vetresultantegrama, 518, i); // cima
-           printf("\n");
-           glcm(matGrama , linha, coluna, +1, 0, vetresultantegrama, 521, i); // baixo
-           printf("\n");
-           glcm(matGrama , linha, coluna, -1, -1, vetresultantegrama, 524, i); // diagonal superior esquerda
-           printf("\n");
-           glcm(matGrama , linha, coluna, -1, +1, vetresultantegrama, 527, i); // diagonal superior direita
-           printf("\n");
-           glcm(matGrama , linha, coluna, +1, +1, vetresultantegrama, 530, i); // diagonal inferior direita
-           printf("\n");
-           glcm(matGrama , linha, coluna, +1, -1, vetresultantegrama, 533, i); // diagonal inferior esquerda
-           printf("\n");
+    //aloca a matriz de ponteiros
+    matGrama = (int**)malloc(linhagrama*sizeof(int *));
+    for(int i = 0; i<linhagrama; i++)
+      *(matGrama+i) = (int*)malloc(colunagrama*sizeof(int));
+    //aloca a matriz de ponteiros
+    matAsfalto = (int**)malloc(linhasfalto*sizeof(int *));
+    for(int i = 0; i<linhasfalto; i++)
+      *(matAsfalto+i) = (int*)malloc(colunasfalto*sizeof(int));
+
+           manipula_arquivo(&arquivoA, vetresultanteasfalto, linhasfalto,  colunasfalto, n,matAsfalto, letra);
+           manipula_arquivo(&arquivoG, vetresultantegrama, linhagrama,  colunagrama, i,matGrama, letra);
+           glcm(matGrama , linhagrama, colunagrama, 0, -1, vetresultantegrama, 512, i); // esquerda
+           glcm(matAsfalto , linhasfalto, colunasfalto, 0, -1, vetresultanteasfalto, 512, n); // esquerda
+           glcm(matAsfalto, linhasfalto, colunasfalto, 0, +1, vetresultanteasfalto, 515, n); // direita
+           glcm(matGrama, linhagrama, colunagrama, 0, +1, vetresultantegrama, 515, i); // direita
+           glcm(matAsfalto , linhasfalto, colunasfalto, -1, 0, vetresultanteasfalto, 518, n); // cima
+           glcm(matGrama , linhagrama, colunagrama, -1, 0, vetresultantegrama, 518, i); // cima
+           glcm(matGrama , linhagrama, colunagrama, +1, 0, vetresultantegrama, 521, i); // baixo
+           glcm(matAsfalto , linhasfalto, colunasfalto, +1, 0, vetresultanteasfalto, 521, n); // baixo
+           glcm(matGrama , linhagrama, colunagrama, -1, -1, vetresultantegrama, 524, i); // diagonal superior esquerda
+           glcm(matAsfalto , linhasfalto, colunasfalto, -1, -1, vetresultanteasfalto, 524, n); // diagonal superior esquerda
+           glcm(matGrama , linhagrama, colunagrama, -1, +1, vetresultantegrama, 527, i); // diagonal superior direita
+           glcm(matAsfalto , linhasfalto, colunasfalto, -1, +1, vetresultanteasfalto, 527, n); // diagonal superior direita
+           glcm(matGrama , linhagrama, colunagrama, +1, +1, vetresultantegrama, 530, i); // diagonal inferior direita
+           glcm(matAsfalto , linhasfalto, colunasfalto, +1, +1, vetresultanteasfalto, 530, n); // diagonal inferior direita
+           glcm(matGrama , linhagrama, colunagrama, +1, -1, vetresultantegrama, 533, i); // diagonal inferior esquerda
+           glcm(matAsfalto , linhasfalto, colunasfalto, +1, -1, vetresultanteasfalto, 533, n); // diagonal inferior esquerda
            normaliza(vetresultantegrama, vetnormalizadograma, i);
-    fclose(arquivoG);
-    n+=1;
-    printf("\nArquivo %s  (%d)\nLinhas: %d \n Colunas: %d \n",fNameGrama,i, linha,coluna);
-    //libera a matriz mat
-    for (int i=0;i<linha;i++)
-           free(*(matGrama+i));
+           normaliza(vetresultanteasfalto, vetnormalizadoasfalto, n);
 
-           free(matGrama);
+    fclose(arquivoG);
+    fclose(arquivoA);
+    n+=1;
+    printf("\nAbrindo arquivo %s (%d)",fNameAsfalto,i);
+    printf("\nAbrindo arquivo %s  (%d)\n",fNameGrama,i);
+    //libera a matriz mat
+    for (int i=0;i<linhagrama;i++){
+       free(*(matAsfalto+i));
+       free(*(matGrama+i));
+    }
+    free(matAsfalto);
+    free(matGrama);
 
   }  //fim da base de testes
 
@@ -195,6 +169,41 @@ rng(grama);
 
 calcula_media(vetnormalizadoasfalto,vetfinalasfalto);
 calcula_media(vetnormalizadograma,vetfinalgrama);
+
+dist_media_aspha = dis_eucl(vetfinalasfalto);
+dist_media_grama = dis_eucl(vetfinalgrama);
+
+int cont = 0;
+for (int i=25;i<50;i++){
+  dist_vet_aspha[cont] = dis_eucl(*(vetnormalizadoasfalto + i));
+  cont++;
+}
+
+cont = 0;
+for (int i=25;i<50;i++){
+  dist_vet_grama[cont] = dis_eucl(*(vetnormalizadograma + i));
+  cont++;
+}
+
+for (int i=0;i<25;i++){
+  if( pow((dist_vet_aspha[i] - dist_media_aspha),2) < pow((dist_vet_aspha[i] - dist_media_grama),2)){
+    taxa_acerto += 1.0;
+  }
+
+  if( pow((dist_vet_aspha[i] - dist_media_aspha),2) > pow((dist_vet_aspha[i] - dist_media_grama),2)){
+    taxa_falsa_aceitacao += 1.0;
+  }
+
+}
+for (int i=0;i<25;i++){
+  if(pow((dist_vet_grama[i] - dist_media_aspha),2) > pow((dist_vet_grama[i] - dist_media_grama),2)){
+    taxa_acerto += 1.0;
+  }
+
+  if(pow((dist_vet_grama[i] - dist_media_aspha),2) < pow((dist_vet_grama[i] - dist_media_grama),2)){
+    taxa_falsa_rejeicao += 1.0;
+  }
+}
 
 //libera o vetor resultante
 for (int i=0;i<50;i++){
@@ -216,12 +225,15 @@ free(vetresultantegrama);
   free(vetfinalasfalto);
   free(vetfinalgrama);
 
+  printf("Taxa de acerto: %lf%% \n", (taxa_acerto/50.0)*100.0);
+  printf("Taxa de taxa falsa aceitacao: %lf%% \n", (taxa_falsa_aceitacao/50.0)*100.0);
+  printf("Taxa de taxa falsa rejeicao: %lf%% \n", (taxa_falsa_rejeicao/50.0)*100.0);
+
     return 0;
 
 }
 
 void rng(char *array){
-
   srand(time( NULL ));//garante que a cada vez que eu rodar o programa o rng será diferente
 
   printf("\n Vetor original: \n");
@@ -230,23 +242,23 @@ void rng(char *array){
       printf("%d ", array[i]);
   }
 
-  printf("Esse é o vetor final:\n");
-
   for (int i = 1; i < 51; i++) {    // rng
 
     int temp = array[i];
     int randomIndex = 0;
     randomIndex = rand() %50;
-    if (randomIndex==0) randomIndex = rand() %50;
-      array[i]           = array[randomIndex];
-      array[randomIndex] = temp;
-    if (array[i]==0){
-      printf("DEU RUIM no %d\n",array[randomIndex] );
-      exit(0);
-    }
+      if (randomIndex==0 || randomIndex>50) randomIndex = rand() %50;
+        array[i]           = array[randomIndex];
+        array[randomIndex] = temp;
+      if (array[i]==0 || array[i]>50){
+        exit(0);
+      }
     }
 
-printf("\n");
+    printf("\nEsse é o vetor final:\n");
+    for (int i = 1; i < 51; i++) {
+    printf("%d ",array[i]);
+    }
 
 }
 
@@ -375,8 +387,6 @@ void glcm(int **img , int L, int C, int pos_lin, int pos_col, double **vetresult
     *(*(vetresultante + n)+ (pos_freq + 1)) = energia;
     *(*(vetresultante + n)+ (pos_freq + 2)) = homogeneidade;
 
-    printf("Cont: %.0lf ener: %.0lf homo: %.0lf \n", contraste, energia, homogeneidade);
-
    for (i=0;i<256;i++)       //libera as linhas da matriz
       free(*(glcm+i));
 
@@ -400,8 +410,6 @@ void normaliza(double **vetresultante, double **vetnormalizado, int n){
     for(i = 0; i < 536; i++){
       *(*(vetnormalizado + n)+ i) = (*(*(vetresultante + n)+ i) - menor) / (maior - menor);
     }
-    printf("Menor: %f\n Maior: %f\n", menor, maior );
-
 }
 
 void calcula_media(double **vetnormalizado, double *vetfinalasfalto){
@@ -410,19 +418,27 @@ void calcula_media(double **vetnormalizado, double *vetfinalasfalto){
 
   media = (double *) calloc(536, sizeof (double));
 
-  for(i=0;i<50;i++){
+  for(i=0;i<25;i++){
     for(j=0;j<536;j++){
       *(media+j) += (*(*(vetnormalizado + i)+ j));
     }
   }
 
   for(j=0;j<536;j++){
-    *(vetfinalasfalto+j)= *(media+j)/50;
-  }
-  printf("Médias:::::::\n" );
-
-  for(j=0;j<536;j++){
-    printf(" %lf", *(vetfinalasfalto+j));
+    *(vetfinalasfalto+j)= *(media+j)/25;
   }
   free(media);
+}
+
+double dis_eucl(double *vetresultante){
+  int i = 0;
+  double distancia = 0.0;
+
+    for(i = 0; i < 536; i++){
+        distancia += pow(*(vetresultante + i),2);
+    }
+    distancia = sqrt(distancia);
+
+    return distancia;
+
 }
