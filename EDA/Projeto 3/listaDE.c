@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "listaDE.h"
+#include <string.h>
 
 struct elemento{
   struct elemento *ant;
@@ -27,6 +28,26 @@ void Libera_lista(Lista* li){
       }
       free(li);
     }
+}
+
+void imprimir(Lista* li){
+    Lista* p = li;
+
+    if((*li) == NULL){
+    printf("Lista vazia\n");
+    //exit(1);
+
+} else {
+
+while((*p) != NULL){
+    printf("Nome: %s \n", (*p)->dados.nome);
+    printf("celular: %s \n", (*p)->dados.Celular);
+    printf("Endereco: %s \n", (*p)->dados.Endereco);
+    printf("Cep: %d \n", (*p)->dados.cep);
+    p = &(*p)->prox;
+}
+
+}
 }
 
 int insere_lista_inicio(Lista* li, struct Pessoa p){
@@ -131,11 +152,44 @@ int remove_lista_final(Lista* li){
   free(no);
   return 1;
 }
+
+int remove_lista(Lista* li, int cep){
+  if(li == NULL) return 0;
+  Elem *no = *li;
+  while(no != NULL && no->dados.cep  != cep){
+    no = no->prox;
+  }
+  if (no == NULL)// não encontrado
+    return 0;
+  if(no->ant == NULL)//remover o primeiro
+    *li = no->prox;
+  else
+    no->ant->prox = no->prox;
+  //não é o ultimo?
+  if(no->prox != NULL)
+    no->prox->ant = no->ant;
+    free(no);
+    return 1;
+}
 //isso vai ser o programa principal
 int main() {
+  int x;
   Lista *li;
   li = cria_lista();
-  Libera_lista(li);
+  imprimir(li);
+
+  pessoa *dados_pessoa;
+  dados_pessoa = (pessoa*)malloc(sizeof(pessoa));
+  dados_pessoa->nome = "Egzona";
+  dados_pessoa->Celular = "12345678";
+  dados_pessoa->Endereco = "Rua de sei la onde";
+  dados_pessoa->cep = 123445656;
+  printf("TESTE");
+  insere_lista_inicio(li, *dados_pessoa);
+  printf("TESTE");
+  imprimir(li);
+  free(dados_pessoa);
+  //Libera_lista(li);
   /*int x = insere_lista_inicio(li, dados_pessoa);
   int x = insere_lista_final(li, dados_pessoa);
   int x = insere_lista_ordenada(li, dados_pessoa);
