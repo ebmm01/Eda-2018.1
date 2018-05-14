@@ -43,8 +43,8 @@ while((*p) != NULL){
     printf("Nome: %s \n", (*p)->dados.nome);
     printf("celular: %s \n", (*p)->dados.Celular);
     printf("Endereco: %s \n", (*p)->dados.Endereco);
-    printf("Cep: %d \n", (*p)->dados.cep);
-    p = &(*p)->prox;
+    printf("Cep: %d \n\n", (*p)->dados.cep);
+    (*p) = (*p)->prox;
 }
 
 }
@@ -171,31 +171,19 @@ int remove_lista(Lista* li, int cep){
     free(no);
     return 1;
 }
-//isso vai ser o programa principal
-int main() {
-  int x;
-  Lista *li;
-  li = cria_lista();
-  imprimir(li);
 
-  pessoa *dados_pessoa;
-  dados_pessoa = (pessoa*)malloc(sizeof(pessoa));
-  dados_pessoa->nome = "Egzona";
-  dados_pessoa->Celular = "12345678";
-  dados_pessoa->Endereco = "Rua de sei la onde";
-  dados_pessoa->cep = 123445656;
-  printf("TESTE");
-  insere_lista_inicio(li, *dados_pessoa);
-  printf("TESTE");
-  imprimir(li);
-  free(dados_pessoa);
-  //Libera_lista(li);
-  /*int x = insere_lista_inicio(li, dados_pessoa);
-  int x = insere_lista_final(li, dados_pessoa);
-  int x = insere_lista_ordenada(li, dados_pessoa);
-  int x = remove_lista_inicio(li);
-  int x = remove_lista_final(li);
-  int x = remove_lista(li, cep_pessoa);*/
-
-  return 0;
+int consulta_lista_pos(Lista* li, int pos, struct Pessoa p){
+  if(li == NULL || pos<= 0) return 0;
+  Elem *no = *li;
+  int i = 1;
+  while (no != NULL && i<pos) {
+    no = no->prox;
+    i++;
+  }
+  if(no == NULL)
+    return 0;
+  else{
+    p = no->dados;
+  return 1;
+  }
 }

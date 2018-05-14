@@ -2,12 +2,12 @@
 #define _LISTAS_
 
 
- typedef struct Pessoa{
+ struct Pessoa{
   char *nome;
   char *Celular;
   char *Endereco;
   int cep;
-}pessoa;
+};
 
 typedef struct elemento* Lista;
 
@@ -28,5 +28,7 @@ int remove_lista_inicio(Lista* li);
 int remove_lista_final(Lista* li);
 
 int remove_lista(Lista* li, int cep);//trocar o cep pelo nome talvez
+
+int consulta_lista_pos(Lista* li, int pos, struct Pessoa p);
 
 #endif
