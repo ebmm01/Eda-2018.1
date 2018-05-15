@@ -43,6 +43,10 @@ int consulta_lista_pos(Lista* li, int pos, struct Pessoa *p);
 int consulta_lista_cep(Lista* li, int cep, struct Pessoa *p);
 //fazer a pesquisa por nome tbm
 
+void pegar_contato(Lista *li,char *name,char *celular,char *endereco,char *data,int cep);
+
+void criar_contato(Lista* li);
+
 void menu();
 
 #endif

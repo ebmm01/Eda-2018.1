@@ -18,8 +18,7 @@ int main(int argc, char const *argv[]) {
   char name[100];
   //pessoa 1
   dados_pessoa = (struct Pessoa*)malloc(sizeof(struct Pessoa));
-  scanf(" %[^\n]s", name);
-  dados_pessoa->nome = name;
+  dados_pessoa->nome = "vai";
   dados_pessoa->Celular = "12345678";
   dados_pessoa->Endereco = "Rua de sei la onde";
   dados_pessoa->cep = 123445656;
@@ -138,7 +137,7 @@ int id=0;
    switch(escolha){
 
      case '1':
-
+      criar_contato(li);
        break;
 
 

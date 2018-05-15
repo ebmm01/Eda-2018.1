@@ -206,10 +206,56 @@ int consulta_lista_cep(Lista* li, int cep, struct Pessoa *p){
   }
 }
 
+void pegar_contato(Lista *li,char *name,char *celular,char *endereco,char *data,int cep){
+
+
+
+
+}
+
+void criar_contato(Lista* li){
+  char *name;
+  char *endereco;
+  char *celular;
+  char *data;
+  int cep;
+
+  name = (char *)malloc(101*sizeof(char));
+  endereco = (char *)malloc(101*sizeof(char));
+  celular = (char *)malloc(11*sizeof(char));
+  data = (char *)malloc(11*sizeof(char));
+
+  struct Pessoa *dados_pessoa;
+  dados_pessoa = (struct Pessoa*)malloc(sizeof(struct Pessoa));
+
+  printf("Nome: \n");
+  scanf(" %[^\n]s", name);
+  printf("Celular: \n");
+  scanf(" %[^\n]", celular);
+  printf("Endereço: \n");
+  scanf(" %[^\n]", endereco);
+  printf("Data: \n");
+  scanf(" %[^\n]", data);
+  printf("Cep: \n");
+  scanf(" %d", &cep);
+
+  dados_pessoa = (struct Pessoa*)malloc(sizeof(struct Pessoa));
+  dados_pessoa->nome = strdup(name);
+  dados_pessoa->Celular = strdup(celular);
+  dados_pessoa->Endereco = strdup(endereco);
+  dados_pessoa->cep = cep;
+  dados_pessoa->Data = strdup(data);
+  insere_lista_ordenada(li, *dados_pessoa);
+  free(dados_pessoa);
+
+
+  free(name);
+  free(endereco);
+  free(celular);
+  free(data);
+}
 
 void menu(){
-
-  system("clear");
 
   printf("\n Agenda \n");
   printf("\n 1 - Inserir novo registro");
