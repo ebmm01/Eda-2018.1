@@ -172,7 +172,7 @@ int remove_lista(Lista* li, int cep){
     return 1;
 }
 
-int consulta_lista_pos(Lista* li, int pos, struct Pessoa p){
+int consulta_lista_pos(Lista* li, int pos, struct Pessoa *p){
   if(li == NULL || pos<= 0) return 0;
   Elem *no = *li;
   int i = 1;
@@ -183,7 +183,21 @@ int consulta_lista_pos(Lista* li, int pos, struct Pessoa p){
   if(no == NULL)
     return 0;
   else{
-    p = no->dados;
+    *p = no->dados;
   return 1;
   }
+}
+
+void menu(){
+
+  system("clear");
+
+  printf("\n Agenda \n");
+  printf("\n 1 - Inserir novo registro");
+  printf("\n 2 - Remover registros");
+  printf("\n 3 - Visualizar registros");
+  printf("\n 4 - Visualizar todos os registros");
+  printf("\n 5 - Sair");
+  printf("\n");
+
 }

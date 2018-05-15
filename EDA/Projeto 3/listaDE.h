@@ -29,6 +29,7 @@ int remove_lista_final(Lista* li);
 
 int remove_lista(Lista* li, int cep);//trocar o cep pelo nome talvez
 
-int consulta_lista_pos(Lista* li, int pos, struct Pessoa p);
+int consulta_lista_pos(Lista* li, int pos, struct Pessoa *p);
 
+void menu();
 #endif

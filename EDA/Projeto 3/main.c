@@ -13,7 +13,7 @@ char escolha= '0', letra;
 int x;
 Lista *li;
 li = cria_lista();
-
+menu();
 struct Pessoa *dados_pessoa;
 dados_pessoa = (struct Pessoa*)malloc(sizeof(struct Pessoa));
 dados_pessoa->nome = "Egzona";
@@ -117,19 +117,5 @@ int id=0;
    }
 
  }*/
-
-}
-
-void menu(){
-
-  system("clear");
-
-  printf("\n Agenda \n");
-  printf("\n 1 - Inserir novo registro");
-  printf("\n 2 - Remover registros");
-  printf("\n 3 - Visualizar registros");
-  printf("\n 4 - Visualizar todos os registros");
-  printf("\n 5 - Sair");
-  printf("\n");
 
 }
