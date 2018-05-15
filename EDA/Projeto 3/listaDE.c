@@ -208,7 +208,16 @@ int consulta_lista_cep(Lista* li, int cep, struct Pessoa *p){
 
 void pegar_contato(Lista *li,char *name,char *celular,char *endereco,char *data,int cep){
 
+  struct Pessoa *dados_pessoa;
+  dados_pessoa = (struct Pessoa*)malloc(sizeof(struct Pessoa));
 
+  dados_pessoa->nome = strdup(name);
+  dados_pessoa->Celular = strdup(celular);
+  dados_pessoa->Endereco = strdup(endereco);
+  dados_pessoa->cep = cep;
+  dados_pessoa->Data = strdup(data);
+  insere_lista_ordenada(li, *dados_pessoa);
+  free(dados_pessoa);
 
 
 }
@@ -225,9 +234,6 @@ void criar_contato(Lista* li){
   celular = (char *)malloc(11*sizeof(char));
   data = (char *)malloc(11*sizeof(char));
 
-  struct Pessoa *dados_pessoa;
-  dados_pessoa = (struct Pessoa*)malloc(sizeof(struct Pessoa));
-
   printf("Nome: \n");
   scanf(" %[^\n]s", name);
   printf("Celular: \n");
@@ -239,22 +245,14 @@ void criar_contato(Lista* li){
   printf("Cep: \n");
   scanf(" %d", &cep);
 
-  dados_pessoa = (struct Pessoa*)malloc(sizeof(struct Pessoa));
-  dados_pessoa->nome = strdup(name);
-  dados_pessoa->Celular = strdup(celular);
-  dados_pessoa->Endereco = strdup(endereco);
-  dados_pessoa->cep = cep;
-  dados_pessoa->Data = strdup(data);
-  insere_lista_ordenada(li, *dados_pessoa);
-  free(dados_pessoa);
-
+  pegar_contato(li, name, celular, endereco, data, cep);
 
   free(name);
   free(endereco);
   free(celular);
   free(data);
 }
-
+void compara_nome();
 void menu(){
 
   printf("\n Agenda \n");
