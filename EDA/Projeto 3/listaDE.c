@@ -40,7 +40,7 @@ void imprimir(Lista* li){
           printf(" Endereco: %s \n", (*p)->dados.Endereco);
           printf(" Cep: %d \n", (*p)->dados.cep);
 	  printf(" Nascimento: %s \n\n", (*p)->dados.Data);
-          (*p) = (*p)->prox;
+          p = &(*p)->prox;
       }
 
     }

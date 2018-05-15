@@ -57,7 +57,11 @@ int main(int argc, char const *argv[]) {
    //parte do arquivo, não implementada ainda
 
     FILE *fp = fopen("contatos.txt", "r");
-
+    if (fp == NULL){
+      printf("Arquivo contatos.txt não encontrado. Criando um..." );
+      //implementar a criação do arquivo no caso dele não existir.
+      exit(0);
+    }
   while((letra=fgetc(fp))!=EOF){
        if (letra=='\n' ){
          linhas++;
@@ -68,10 +72,6 @@ printf("\n%d\n",linhas );
 rewind(fp);
 char (*lines)[101] = NULL; /* pointer to array of type char [MAXC] */
  int i, n = 0;
-    if (fp == NULL) {  /* valida o arquivo para leitura */
-        fprintf (stderr, "error: file open failed'.\n");
-        return 1;
-    }
 
     if (!(lines = malloc (linhas * sizeof *lines))) { /* alloca o max de arrays */
         fprintf (stderr, "error: virtual memory exhausted 'lines'.\n");
@@ -88,55 +88,51 @@ char (*lines)[101] = NULL; /* pointer to array of type char [MAXC] */
     /* exibe linhas */
     for (i = 0; i < n; i++) printf (" line[%2d] : '%s'\n", i + 1, lines[i]);
 
-int a0 = 0,a1 = 1,a2 =2,a3 =3, a4=4, a5=5;
+  int a0 = 0,a1 = 1,a2 =2,a3 =3, a4=4, a5=5;
 
-for (i = 0; i < n; i++){
-  if(i==a0){
-dados_pessoa = (struct Pessoa*)malloc(sizeof(struct Pessoa));
-    dados_pessoa->nome =lines[i] ;
-   a0 += 6;
+  for (i = 0; i < n; i++){
+    if(i==a0){
+  dados_pessoa = (struct Pessoa*)malloc(sizeof(struct Pessoa));
+      dados_pessoa->nome =lines[i] ;
+     a0 += 6;
+    }
+    if(i==a1){
+      dados_pessoa->Celular = lines[i];
+     a1 += 6;
+    }
+    if(i==a2){
+      dados_pessoa->Endereco = lines[i];
+     a2 += 6;
+    }
+    if(i==a3){
+      int num1 = atoi(lines[i]);
+
+      dados_pessoa->cep =num1;
+    	a3+= 6;
+    }
+    if(i==a4){
+      dados_pessoa->Data = lines[i];
+     a4 += 6;
+    }
+
+    if(i==a5){
+  	insere_lista_ordenada(li, *dados_pessoa);
+    free(dados_pessoa);
+     a5 += 6;
+    }
+
   }
-  if(i==a1){
-    dados_pessoa->Celular = lines[i];
-   a1 += 6;
-  }
-  if(i==a2){
-    dados_pessoa->Endereco = lines[i];
-   a2 += 6;
-  }
-  if(i==a3){
-    int num1 = atoi(lines[i]);
+  a0 = 0,a1 = 1,a2 =2,a3 =3, a4=4, a5=5;
+  imprimir(li);
 
-    dados_pessoa->cep =num1;
-  	a3+= 6;
-	
-
-
-
-  }
-  if(i==a4){		
-    dados_pessoa->Data = lines[i];
-   a4 += 6;
-  }
-
-  if(i==a5){
-	insere_lista_ordenada(li, *dados_pessoa);
-free(dados_pessoa);
-   a5 += 6;
-  }
-
-
-}
-a0 = 0,a1 = 1,a2 =2,a3 =3, a4=4, a5=5;
-imprimir(li);
-
-    free (lines);   /* free allocated memory */
+  free (lines);   /* free allocated memory */
 
 
 
 //menu incompleto
- /*while(escolha!='5'){
+ while(escolha!='5'){
 int id=0;
+ menu();
  scanf("%s",&escolha );
 
    switch(escolha){
@@ -150,6 +146,7 @@ int id=0;
       break;
 
      case '3':
+     imprimir(li);
        break;
 
      case '4':
@@ -165,6 +162,6 @@ int id=0;
 
    }
 
- }*/
+ }
 
 }
