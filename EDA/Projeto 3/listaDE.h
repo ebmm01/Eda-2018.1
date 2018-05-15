@@ -31,5 +31,9 @@ int remove_lista(Lista* li, int cep);//trocar o cep pelo nome talvez
 
 int consulta_lista_pos(Lista* li, int pos, struct Pessoa *p);
 
+int consulta_lista_cep(Lista* li, int cep, struct Pessoa *p);
+//fazer a pesquisa por nome tbm
+
 void menu();
+
 #endif

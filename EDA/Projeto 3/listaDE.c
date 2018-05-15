@@ -3,13 +3,16 @@
 #include "listaDE.h"
 #include <string.h>
 
+
 struct elemento{
   struct elemento *ant;
   struct Pessoa dados;
   struct elemento *prox;
 };
 
+
 typedef struct elemento Elem;
+
 
 Lista* cria_lista(){
   Lista* li = (Lista*)malloc(sizeof(Lista));
@@ -17,6 +20,7 @@ Lista* cria_lista(){
     *li = NULL;
   return li;
 }
+
 
 void Libera_lista(Lista* li){
     if(li != NULL){
@@ -30,6 +34,7 @@ void Libera_lista(Lista* li){
     }
 }
 
+
 void imprimir(Lista* li){
     Lista* p = li;
 
@@ -37,18 +42,19 @@ void imprimir(Lista* li){
     printf("Lista vazia\n");
     //exit(1);
 
-} else {
+    } else {
 
-while((*p) != NULL){
-    printf("Nome: %s \n", (*p)->dados.nome);
-    printf("celular: %s \n", (*p)->dados.Celular);
-    printf("Endereco: %s \n", (*p)->dados.Endereco);
-    printf("Cep: %d \n\n", (*p)->dados.cep);
-    (*p) = (*p)->prox;
+      while((*p) != NULL){
+          printf("Nome: %s \n", (*p)->dados.nome);
+          printf("celular: %s \n", (*p)->dados.Celular);
+          printf("Endereco: %s \n", (*p)->dados.Endereco);
+          printf("Cep: %d \n\n", (*p)->dados.cep);
+          (*p) = (*p)->prox;
+      }
+
+    }
 }
 
-}
-}
 
 int insere_lista_inicio(Lista* li, struct Pessoa p){
   if(li == NULL) return 0;
@@ -64,6 +70,7 @@ int insere_lista_inicio(Lista* li, struct Pessoa p){
   return 1;
 
 }
+
 
 int insere_lista_final(Lista* li, struct Pessoa p){
   if(li == NULL) return 0;
@@ -84,6 +91,7 @@ int insere_lista_final(Lista* li, struct Pessoa p){
   }
   return 1;
 }
+
 
 int insere_lista_ordenada(Lista* li, struct Pessoa p){
   if(li == NULL) return 0;
@@ -120,6 +128,7 @@ int insere_lista_ordenada(Lista* li, struct Pessoa p){
 
 }
 
+
 int remove_lista_inicio(Lista* li){
   if(li == NULL)
     return 0;
@@ -134,6 +143,7 @@ int remove_lista_inicio(Lista* li){
   free(no);
   return 1;
 }
+
 
 int remove_lista_final(Lista* li){
   if(li == NULL) return 0;
@@ -152,6 +162,7 @@ int remove_lista_final(Lista* li){
   free(no);
   return 1;
 }
+
 
 int remove_lista(Lista* li, int cep){
   if(li == NULL) return 0;
@@ -172,6 +183,7 @@ int remove_lista(Lista* li, int cep){
     return 1;
 }
 
+
 int consulta_lista_pos(Lista* li, int pos, struct Pessoa *p){
   if(li == NULL || pos<= 0) return 0;
   Elem *no = *li;
@@ -187,6 +199,22 @@ int consulta_lista_pos(Lista* li, int pos, struct Pessoa *p){
   return 1;
   }
 }
+
+
+int consulta_lista_cep(Lista* li, int cep, struct Pessoa *p){
+  if(li == NULL) return 0;
+  Elem *no = *li;
+  while (no != NULL && no->dados.cep != cep) {
+    no = no->prox;
+  }
+  if(no == NULL)
+    return 0;
+  else{
+    *p = no->dados;
+    return 1;
+  }
+}
+
 
 void menu(){
 
