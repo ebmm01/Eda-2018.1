@@ -66,7 +66,7 @@ int main(int argc, char const *argv[]) {
 
 printf("\n%d\n",linhas );
 rewind(fp);
-char (*lines)[100] = NULL; /* pointer to array of type char [MAXC] */
+char (*lines)[101] = NULL; /* pointer to array of type char [MAXC] */
  int i, n = 0;
     if (fp == NULL) {  /* valida o arquivo para leitura */
         fprintf (stderr, "error: file open failed'.\n");
@@ -87,23 +87,49 @@ char (*lines)[100] = NULL; /* pointer to array of type char [MAXC] */
 
     /* exibe linhas */
     for (i = 0; i < n; i++) printf (" line[%2d] : '%s'\n", i + 1, lines[i]);
-dados_pessoa = (struct Pessoa*)malloc(sizeof(struct Pessoa));
-for (i = 1; i < 5; i++){
-  if(i==0+1)
-    dados_pessoa->nome =lines[0] ;
-  if(i==1+1)
-    dados_pessoa->Celular = lines[i];
-  if(i==2+1)
-    dados_pessoa->Endereco = lines[i];
-  if(i==4){
-    int num1 = atoi(lines[3]);
 
-    dados_pessoa->cep =num1 ;}
+int a0 = 0,a1 = 1,a2 =2,a3 =3, a4=4, a5=5;
+
+for (i = 0; i < n; i++){
+  if(i==a0){
+dados_pessoa = (struct Pessoa*)malloc(sizeof(struct Pessoa));
+    dados_pessoa->nome =lines[i] ;
+   a0 += 6;
+  }
+  if(i==a1){
+    dados_pessoa->Celular = lines[i];
+   a1 += 6;
+  }
+  if(i==a2){
+    dados_pessoa->Endereco = lines[i];
+   a2 += 6;
+  }
+  if(i==a3){
+    int num1 = atoi(lines[i]);
+
+    dados_pessoa->cep =num1;
+  	a3+= 6;
+	
+
+
+
+  }
+  if(i==a4){		
+    dados_pessoa->Data = lines[i];
+   a4 += 6;
+  }
+
+  if(i==a5){
+	insere_lista_ordenada(li, *dados_pessoa);
+free(dados_pessoa);
+   a5 += 6;
+  }
+
+
 }
-insere_lista_ordenada(li, *dados_pessoa);
+a0 = 0,a1 = 1,a2 =2,a3 =3, a4=4, a5=5;
 imprimir(li);
 
-free(dados_pessoa);
     free (lines);   /* free allocated memory */
 
 

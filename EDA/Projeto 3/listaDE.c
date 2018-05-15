@@ -35,10 +35,11 @@ void imprimir(Lista* li){
     } else {
 
       while((*p) != NULL){
-          printf("Nome: %s \n", (*p)->dados.nome);
-          printf("celular: %s \n", (*p)->dados.Celular);
-          printf("Endereco: %s \n", (*p)->dados.Endereco);
-          printf("Cep: %d \n\n", (*p)->dados.cep);
+          printf(" Nome: %s \n", (*p)->dados.nome);
+          printf(" celular: %s \n", (*p)->dados.Celular);
+          printf(" Endereco: %s \n", (*p)->dados.Endereco);
+          printf(" Cep: %d \n", (*p)->dados.cep);
+	  printf(" Nascimento: %s \n\n", (*p)->dados.Data);
           (*p) = (*p)->prox;
       }
 

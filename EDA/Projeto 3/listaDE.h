@@ -7,6 +7,7 @@ struct Pessoa{
   char *Celular;
   char *Endereco;
   int cep;
+  char *Data;
 };
 
 struct elemento{
