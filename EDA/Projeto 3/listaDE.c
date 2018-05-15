@@ -4,16 +4,6 @@
 #include <string.h>
 
 
-struct elemento{
-  struct elemento *ant;
-  struct Pessoa dados;
-  struct elemento *prox;
-};
-
-
-typedef struct elemento Elem;
-
-
 Lista* cria_lista(){
   Lista* li = (Lista*)malloc(sizeof(Lista));
   if (li != NULL)

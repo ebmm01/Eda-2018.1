@@ -1,13 +1,21 @@
-#ifndef _LISTAS_
-#define _LISTAS_
+#ifndef listaDE
+#define listaDE
 
 
- struct Pessoa{
+struct Pessoa{
   char *nome;
   char *Celular;
   char *Endereco;
   int cep;
 };
+
+struct elemento{
+  struct elemento *ant;
+  struct Pessoa dados;
+  struct elemento *prox;
+};
+
+typedef struct elemento Elem;
 
 typedef struct elemento* Lista;
 
