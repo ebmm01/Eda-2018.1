@@ -46,6 +46,40 @@ void imprimir(Lista* li){
     }
 }
 
+int count(Lista *temp)
+{
+  int count = 0;  // Initialize count
+    Lista* current = temp;  // Initialize current
+    while ((*current) != NULL)
+    {
+        count++;
+        current = &(*current)->prox;
+    }
+    return count;
+}
+
+void salva_arquivo(Lista* p){
+    FILE *fp = fopen("contatos.txt", "w+");
+    int n = count(p);
+
+      printf("Salvando lista no arquivo contatos.txt...\n");
+
+      while((*p) != NULL){
+
+        fprintf(fp,"%s\n",(*p)->dados.nome);
+        fprintf(fp,"%s\n",(*p)->dados.Celular);
+        fprintf(fp,"%s\n",(*p)->dados.Endereco);
+        fprintf(fp,"%d\n",(*p)->dados.cep);
+        fprintf(fp,"%s\n$\n",(*p)->dados.Data);
+
+        p = &(*p)->prox;
+      }
+      printf("!!!!!!!!!!!!! %d !!!!!!!!!111\n", n);
+      imprimir(p);
+
+      fclose (fp);
+
+}
 
 int insere_lista_inicio(Lista* li, struct Pessoa p){
   if(li == NULL) return 0;
@@ -216,7 +250,7 @@ void pegar_contato(Lista *li,char *name,char *celular,char *endereco,char *data,
   dados_pessoa->Endereco = strdup(endereco);
   dados_pessoa->cep = cep;
   dados_pessoa->Data = strdup(data);
-  insere_lista_ordenada(li, *dados_pessoa);
+  insere_lista_final(li, *dados_pessoa);
   free(dados_pessoa);
 
 

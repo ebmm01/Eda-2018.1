@@ -26,6 +26,10 @@ void Libera_lista(Lista* li);
 
 void imprimir(Lista* li);
 
+int count(Lista *temp);
+
+void salva_arquivo(Lista* li);
+
 int insere_lista_inicio(Lista* li, struct Pessoa p);
 
 int insere_lista_final(Lista* li, struct Pessoa p);

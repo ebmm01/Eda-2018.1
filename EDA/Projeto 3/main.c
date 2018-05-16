@@ -82,7 +82,7 @@ char (*lines)[101] = NULL;
     }
 
     if(i==a5){
-  	insere_lista_ordenada(li, *dados_pessoa);
+  	insere_lista_final(li, *dados_pessoa);
     free(dados_pessoa);
      a5 += 6;
     }
@@ -116,6 +116,7 @@ char (*lines)[101] = NULL;
        break;
 
      case '5':
+     salva_arquivo(li);
        break;
 
      default:
