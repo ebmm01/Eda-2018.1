@@ -9,6 +9,7 @@ int main(int argc, char const *argv[]) {
   char escolha= '0', letra;
   Lista *li;
   li = cria_lista();
+  char *name;
 
   struct Pessoa *dados_pessoa;
 
@@ -61,14 +62,63 @@ char (*lines)[101] = NULL;
 
 
      case '2':
+      name = (char *)malloc(101*sizeof(char));
+
+      int verify = 0;
+
+      do{
+        printf("Nome a ser apagado: ");
+
+        scanf(" %[^\n]s", name);
+        verify = validar_nome(name);
+        if (verify != 1) {
+          printf("Nome não pode passar 100 caracteres!\n");
+        }
+     }while(verify != 1);
+
+      remove_lista(li, name);
+      free(name);
+
       break;
 
      case '3':
-     imprimir(li);
-       break;
+     struct Pessoa *pessoa;
+     pessoa = (struct Pessoa*)malloc(sizeof(struct Pessoa));
+     name = (char *)malloc(101*sizeof(char));
 
-     case '4':
-       break;
+     do{
+       printf("Nome a ser pesquisada: ");
+
+       scanf(" %[^\n]s", name);
+       verify = validar_nome(name);
+       if (verify != 1) {
+         printf("Nome não pode passar 100 caracteres!\n");
+       }
+     }while(verify != 1);
+
+     if(consulta_lista_nome(li, name, pessoa) == 1){
+       printf("\n");
+       printf(" Nome: %s \n", pessoa->nome);
+       printf(" celular: %s \n", pessoa->Celular);
+       printf(" Endereco: %s \n", pessoa->Endereco);
+       printf(" Cep: %d \n", pessoa->cep);
+       printf(" Nascimento: %s \n\n", pessoa->Data);
+
+     }
+     else{
+       printf("Não há contatos com este nome! \n");
+     }
+
+     free(pessoa);
+     free(name);
+
+   }
+
+  break;
+
+    case '4':{
+    imprimir(li);
+    break;
 
      case '5':
      salva_arquivo(li);

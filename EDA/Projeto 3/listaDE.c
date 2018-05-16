@@ -193,7 +193,6 @@ int insere_lista_ordenada(Lista* li, struct Pessoa p){
 
 }
 
-
 int remove_lista_inicio(Lista* li){
   if(li == NULL)
     return 0;
@@ -229,10 +228,10 @@ int remove_lista_final(Lista* li){
 }
 
 
-int remove_lista(Lista* li, int cep){
+int remove_lista(Lista* li, char *name){
   if(li == NULL) return 0;
   Elem *no = *li;
-  while(no != NULL && no->dados.cep  != cep){
+  while(no != NULL && strstr(no->dados.nome, name) == NULL){
     no = no->prox;
   }
   if (no == NULL)// não encontrado
@@ -266,10 +265,10 @@ int consulta_lista_pos(Lista* li, int pos, struct Pessoa *p){
 }
 
 
-int consulta_lista_cep(Lista* li, int cep, struct Pessoa *p){
+int consulta_lista_nome(Lista* li, char *name, struct Pessoa *p){
   if(li == NULL) return 0;
   Elem *no = *li;
-  while (no != NULL && no->dados.cep != cep) {
+  while (no != NULL && strstr(no->dados.nome, name) == NULL) {
     no = no->prox;
   }
   if(no == NULL)

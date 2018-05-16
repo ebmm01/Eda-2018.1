@@ -45,11 +45,11 @@ int remove_lista_inicio(Lista* li);
 
 int remove_lista_final(Lista* li);
 
-int remove_lista(Lista* li, int cep);//trocar o cep pelo nome talvez
+int remove_lista(Lista* li, char *name);//trocar o cep pelo nome talvez
 
 int consulta_lista_pos(Lista* li, int pos, struct Pessoa *p);
 
-int consulta_lista_cep(Lista* li, int cep, struct Pessoa *p);
+int consulta_lista_nome(Lista* li, char *name, struct Pessoa *p);
 
 void pegar_contato(Lista *li,char *name,char *celular,char *endereco,char *data,int cep);
 
