@@ -35,15 +35,19 @@ void imprimir(Lista* li){
     } else {
 
       while((*p) != NULL){
-          printf(" Nome: %s \n", (*p)->dados.nome);
-          printf(" celular: %s \n", (*p)->dados.Celular);
-          printf(" Endereco: %s \n", (*p)->dados.Endereco);
-          printf(" Cep: %d \n", (*p)->dados.cep);
-	  printf(" Nascimento: %s \n\n", (*p)->dados.Data);
+          imprimir_elemento(&(*p));
           p = &(*p)->prox;
       }
 
     }
+}
+
+void imprimir_elemento(Lista* li){
+    printf(" Nome: %s \n", (*li)->dados.nome);
+    printf(" celular: %s \n", (*li)->dados.Celular);
+    printf(" Endereco: %s \n", (*li)->dados.Endereco);
+    printf(" Cep: %d \n", (*li)->dados.cep);
+    printf(" Nascimento: %s \n\n", (*li)->dados.Data);
 }
 
 int count(Lista *temp)

@@ -26,6 +26,8 @@ void Libera_lista(Lista* li);
 
 void imprimir(Lista* li);
 
+void imprimir_elemento(Lista* li);
+
 int count(Lista *temp);
 
 void salva_arquivo(Lista* li);
