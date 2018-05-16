@@ -47,6 +47,14 @@ void pegar_contato(Lista *li,char *name,char *celular,char *endereco,char *data,
 
 void criar_contato(Lista* li);
 
+void criar_contato(Lista* li);
+
+int validar_telefone(char *telefone);
+
+int validar_data(char *data);
+
+int validar_nome(char *nome);
+
 void menu();
 
 #endif

@@ -227,21 +227,58 @@ void criar_contato(Lista* li){
   char *endereco;
   char *celular;
   char *data;
-  int cep;
+  unsigned int cep;
 
   name = (char *)malloc(101*sizeof(char));
   endereco = (char *)malloc(101*sizeof(char));
   celular = (char *)malloc(11*sizeof(char));
   data = (char *)malloc(11*sizeof(char));
 
+  struct Pessoa *dados_pessoa;
+  dados_pessoa = (struct Pessoa*)malloc(sizeof(struct Pessoa));
+
   printf("Nome: \n");
+  int verify = 0;
+  do{
   scanf(" %[^\n]s", name);
+    verify = validar_nome(name);
+    if (verify != 1) {
+    printf("Nome não pode passar 100 caracteres!\n");
+    }
+  }while(verify != 1);
+
   printf("Celular: \n");
-  scanf(" %[^\n]", celular);
+
+  verify = 0;
+  do{
+    scanf(" %[^\n]", celular);
+    verify = validar_telefone(celular);
+    if (verify != 1) {
+      printf("Entrada inválida. Formato: XXXXX-XXXX\n");
+    }
+  }while(verify != 1);
+
   printf("Endereço: \n");
+  verify = 0;
+  do{
   scanf(" %[^\n]", endereco);
+  verify = validar_nome(endereco);
+  if (verify != 1) {
+    printf("Endereço não pode passar 100 caracteres!\n");
+  }
+  }while(verify != 1);
+
   printf("Data: \n");
-  scanf(" %[^\n]", data);
+
+  verify = 0;
+  do{
+    scanf(" %[^\n]", data);
+    verify = validar_data(data);
+    if (verify != 1) {
+      printf("Entrada inválida. Formato: XX/XX/XX\n");
+    }
+  }while(verify != 1);
+
   printf("Cep: \n");
   scanf(" %d", &cep);
 
@@ -252,6 +289,69 @@ void criar_contato(Lista* li){
   free(celular);
   free(data);
 }
+
+int validar_telefone(char *telefone) {
+
+
+	int tamanho = strlen(telefone);
+  int i;
+
+	if (tamanho != 10) {
+		return 0;
+	}
+
+	// formato XXXXX-XXXX
+	for (i = 0; i < tamanho - 1; i++) {
+		if (telefone[i] < '0' || telefone[i] > '9') {
+
+      if (i == 5 && telefone[i] != '-') {
+  			return 0;
+  		}
+		}
+
+	}
+
+	return 1;
+
+}
+
+int validar_nome(char *palavra){
+    int tamanho = strlen(palavra);
+
+    if (tamanho > 101) {
+  		return 0;
+  	}
+
+    return 1;
+}
+
+int validar_data(char *data) {
+
+
+	int tamanho = strlen(data);
+
+	if (tamanho != 8) {
+		return 0;
+	}
+
+	// formato XXXXX-XXXX
+	for (int i = 0; i < tamanho - 1; i++) {
+		if (data[i] < '0' || data[i] > '9') {
+
+      if (i == 2 && data[i] != '/') {
+  			return 0;
+  		}
+      if (i == 5 && data[i] != '/') {
+  			return 0;
+  		}
+		}
+
+	}
+
+	return 1;
+
+}
+
 void compara_nome();
 void menu(){
 
