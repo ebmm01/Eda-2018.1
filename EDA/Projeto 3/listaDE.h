@@ -39,6 +39,8 @@ int insere_lista_inicio(Lista* li, struct Pessoa p);
 
 int insere_lista_final(Lista* li, struct Pessoa p);
 
+int verifica_ordem_alfabetica(char* char1, char * char2);
+
 int insere_lista_ordenada(Lista* li, struct Pessoa p);
 
 int remove_lista_inicio(Lista* li);

@@ -62,6 +62,7 @@ char (*lines)[101] = NULL;
 
 
      case '2':
+     {
       name = (char *)malloc(101*sizeof(char));
 
       int verify = 0;
@@ -78,33 +79,37 @@ char (*lines)[101] = NULL;
 
       remove_lista(li, name);
       free(name);
+    }
 
       break;
 
      case '3':
-     struct Pessoa *pessoa;
-     pessoa = (struct Pessoa*)malloc(sizeof(struct Pessoa));
-     name = (char *)malloc(101*sizeof(char));
+     {
+       struct Pessoa *pessoa;
+       pessoa = (struct Pessoa*)malloc(sizeof(struct Pessoa));
+       name = (char *)malloc(101*sizeof(char));
+       int verify;
+         verify = 0;
+       do{
+         printf("Nome a ser pesquisada: ");
 
-     do{
-       printf("Nome a ser pesquisada: ");
+         scanf(" %[^\n]s", name);
+         verify = validar_nome(name);
+         if (verify != 1) {
+           printf("Nome não pode passar 100 caracteres!\n");
+         }
+       }while(verify != 1);
 
-       scanf(" %[^\n]s", name);
-       verify = validar_nome(name);
-       if (verify != 1) {
-         printf("Nome não pode passar 100 caracteres!\n");
+       if(consulta_lista_nome(li, name, pessoa) == 1){
+         printf("\n");
+         printf(" Nome: %s \n", pessoa->nome);
+         printf(" celular: %s \n", pessoa->Celular);
+         printf(" Endereco: %s \n", pessoa->Endereco);
+         printf(" Cep: %d \n", pessoa->cep);
+         printf(" Nascimento: %s \n\n", pessoa->Data);
+
        }
-     }while(verify != 1);
 
-     if(consulta_lista_nome(li, name, pessoa) == 1){
-       printf("\n");
-       printf(" Nome: %s \n", pessoa->nome);
-       printf(" celular: %s \n", pessoa->Celular);
-       printf(" Endereco: %s \n", pessoa->Endereco);
-       printf(" Cep: %d \n", pessoa->cep);
-       printf(" Nascimento: %s \n\n", pessoa->Data);
-
-     }
      else{
        printf("Não há contatos com este nome! \n");
      }
@@ -114,7 +119,7 @@ char (*lines)[101] = NULL;
 
    }
 
-  break;
+   break;
 
     case '4':{
     imprimir(li);
@@ -130,8 +135,8 @@ char (*lines)[101] = NULL;
      printf("Opção inválida; Tente novamente.\n");
 
 
-   }
+    }
 
- }
-
+    }
+  }
 }

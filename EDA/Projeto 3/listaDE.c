@@ -1,7 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "listaDE.h"
 #include <string.h>
+#include <ctype.h>
+#include "listaDE.h"
 
 
 Lista* cria_lista(){
@@ -156,7 +157,21 @@ int insere_lista_final(Lista* li, struct Pessoa p){
   }
   return 1;
 }
+int verifica_ordem_alfabetica(char* char1, char * char2){
+  char *nome, *nome2;
+  int retorno=0;
+  nome = (char *)malloc((strlen(char1) + 13) * sizeof(char));
+  nome2 = (char *)malloc((strlen(char2) + 13) * sizeof(char));
+  strcpy(nome, char1);
+  strcpy(nome2, char2);
 
+  for ( ; *nome; ++nome) *nome = tolower(*nome);
+  for ( ; *nome2; ++nome2) *nome2 = tolower(*nome2);
+
+  retorno = strcmp(nome, nome2);
+
+  return retorno;
+}
 
 int insere_lista_ordenada(Lista* li, struct Pessoa p){
   if(li == NULL) return 0;
@@ -171,7 +186,7 @@ int insere_lista_ordenada(Lista* li, struct Pessoa p){
   }
   else { //procura onde inserir
     Elem *ante, *atual = *li;
-    while(atual != NULL && atual->dados.cep <p.cep){
+    while(atual != NULL && verifica_ordem_alfabetica(atual->dados.nome, p.nome) < 0){
       ante=atual;
       atual = atual->prox;
     }
