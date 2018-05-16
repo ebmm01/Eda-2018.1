@@ -79,11 +79,47 @@ void salva_arquivo(Lista* p){
         p = &(*p)->prox;
       }
       printf("!!!!!!!!!!!!! %d !!!!!!!!!111\n", n);
-      imprimir(p);
-
       fclose (fp);
-
 }
+
+void abre_arquivo(char lines[][101], int n, Lista* li){
+  int a0 = 0,a1 = 1,a2 =2,a3 =3, a4=4, a5=5, i=0;
+  struct Pessoa *dados_pessoa;
+  for (i = 0; i < n; i++){
+    if(i==a0){
+      dados_pessoa = (struct Pessoa*)malloc(sizeof(struct Pessoa));
+      dados_pessoa->nome =lines[i] ;
+     a0 += 6;
+    }
+    if(i==a1){
+      dados_pessoa->Celular = lines[i];
+     a1 += 6;
+    }
+    if(i==a2){
+      dados_pessoa->Endereco = lines[i];
+     a2 += 6;
+    }
+    if(i==a3){
+      int num1 = atoi(lines[i]);
+
+      dados_pessoa->cep =num1;
+    	a3+= 6;
+    }
+    if(i==a4){
+      dados_pessoa->Data = lines[i];
+     a4 += 6;
+    }
+
+    if(i==a5){
+  	insere_lista_final(li, *dados_pessoa);
+    free(dados_pessoa);
+     a5 += 6;
+    }
+
+  }
+  a0 = 0,a1 = 1,a2 =2,a3 =3, a4=4, a5=5;
+}
+
 
 int insere_lista_inicio(Lista* li, struct Pessoa p){
   if(li == NULL) return 0;
@@ -313,7 +349,7 @@ void criar_contato(Lista* li){
     scanf(" %[^\n]", data);
     verify = validar_data(data);
     if (verify != 1) {
-      printf("Entrada inválida. Formato: XX/XX/XX\n");
+      printf("Entrada inválida. Formato: XX/XX/XXXX\n");
     }
   }while(verify != 1);
 
@@ -368,11 +404,11 @@ int validar_data(char *data) {
 
 	int tamanho = strlen(data);
 
-	if (tamanho != 8) {
+	if (tamanho != 10) {
 		return 0;
 	}
 
-	// formato XXXXX-XXXX
+	// formato XX/XX/XXXX
 	for (int i = 0; i < tamanho - 1; i++) {
 		if (data[i] < '0' || data[i] > '9') {
 
