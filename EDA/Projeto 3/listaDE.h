@@ -6,7 +6,7 @@ struct Pessoa{
   char *nome;
   char *Celular;
   char *Endereco;
-  int cep;
+  long long cep;
   char *Data;
 };
 
@@ -34,7 +34,6 @@ void salva_arquivo(Lista* li);
 
 void abre_arquivo(char lines[][101], int n, Lista* li);
 
-
 int insere_lista_inicio(Lista* li, struct Pessoa p);
 
 int insere_lista_final(Lista* li, struct Pessoa p);
@@ -42,6 +41,10 @@ int insere_lista_final(Lista* li, struct Pessoa p);
 int verifica_ordem_alfabetica(char* char1, char * char2);
 
 int insere_lista_ordenada(Lista* li, struct Pessoa p);
+
+Lista* ordena(Lista* li);
+
+Lista *copia(Lista* li);
 
 int remove_lista_inicio(Lista* li);
 

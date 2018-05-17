@@ -28,16 +28,16 @@ void Libera_lista(Lista* li){
 
 void imprimir(Lista* li){
     Lista* p = li;
-
-    if((*li) == NULL){
+    Elem* no = *p;
+    if(no == NULL){
     printf("Lista vazia\n");
     //exit(1);
 
     } else {
 
-      while((*p) != NULL){
-          imprimir_elemento(&(*p));
-          p = &(*p)->prox;
+      while(&(*no) != NULL){
+          imprimir_elemento(&no);
+          no =no->prox;
       }
 
     }
@@ -47,7 +47,7 @@ void imprimir_elemento(Lista* li){
     printf(" Nome: %s \n", (*li)->dados.nome);
     printf(" celular: %s \n", (*li)->dados.Celular);
     printf(" Endereco: %s \n", (*li)->dados.Endereco);
-    printf(" Cep: %d \n", (*li)->dados.cep);
+    printf(" Cep: %lld \n", (*li)->dados.cep);
     printf(" Nascimento: %s \n\n", (*li)->dados.Data);
 }
 
@@ -74,7 +74,7 @@ void salva_arquivo(Lista* p){
         fprintf(fp,"%s\n",(*p)->dados.nome);
         fprintf(fp,"%s\n",(*p)->dados.Celular);
         fprintf(fp,"%s\n",(*p)->dados.Endereco);
-        fprintf(fp,"%d\n",(*p)->dados.cep);
+        fprintf(fp,"%lld\n",(*p)->dados.cep);
         fprintf(fp,"%s\n$\n",(*p)->dados.Data);
 
         p = &(*p)->prox;
@@ -82,6 +82,7 @@ void salva_arquivo(Lista* p){
       printf("!!!!!!!!!!!!! %d !!!!!!!!!111\n", n);
       fclose (fp);
 }
+
 
 void abre_arquivo(char lines[][101], int n, Lista* li){
   int a0 = 0,a1 = 1,a2 =2,a3 =3, a4=4, a5=5, i=0;
@@ -157,21 +158,34 @@ int insere_lista_final(Lista* li, struct Pessoa p){
   }
   return 1;
 }
+
+
 int verifica_ordem_alfabetica(char* char1, char * char2){
   char *nome, *nome2;
   int retorno=0;
   nome = (char *)malloc((strlen(char1) + 13) * sizeof(char));
   nome2 = (char *)malloc((strlen(char2) + 13) * sizeof(char));
-  strcpy(nome, char1);
-  strcpy(nome2, char2);
+  size_t tamanho_nome = sizeof (nome);
+  size_t tamanho_nome2 = sizeof (nome2);
+  if (nome == NULL || nome2 == NULL) {
 
-  for ( ; *nome; ++nome) *nome = tolower(*nome);
-  for ( ; *nome2; ++nome2) *nome2 = tolower(*nome2);
+  		printf("\nErro de memória. Encerrando...\n");
+  		exit(0);
+  	}
+  memcpy(nome, char1,tamanho_nome);
+  memcpy(nome2, char2,tamanho_nome2 );
+
+  for(int i = 0; i < (int)strlen(nome); i++)
+    nome[i] = tolower(char1[i]);
+
+  for(int i = 0; i < (int)strlen(nome); i++)
+    nome2[i] = tolower(char2[i]);
 
   retorno = strcmp(nome, nome2);
 
   return retorno;
 }
+
 
 int insere_lista_ordenada(Lista* li, struct Pessoa p){
   if(li == NULL) return 0;
@@ -206,6 +220,21 @@ int insere_lista_ordenada(Lista* li, struct Pessoa p){
     return 1;
   }
 
+}
+
+Lista* ordena(Lista* li){
+  Lista *retorno = cria_lista();
+  Elem *no = *li;
+
+  while (no != NULL){
+    insere_lista_ordenada( retorno, no->dados);
+    no = no->prox;
+  }
+
+  free(no);
+
+    return retorno;
+    free(retorno);
 }
 
 int remove_lista_inicio(Lista* li){

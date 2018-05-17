@@ -41,16 +41,10 @@ char (*lines)[101] = NULL;
     }
     if (fp != stdin) fclose (fp);
 
-    //for (i = 0; i < n; i++) printf (" line[%2d] : '%s'\n", i + 1, lines[i]);
-
     abre_arquivo(lines, n,  li);
 
-  imprimir(li);
-
   free (lines);
-
  while(escolha!='5'){
-  int id=0;
  menu();
  scanf("%s",&escolha );
 
@@ -105,7 +99,7 @@ char (*lines)[101] = NULL;
          printf(" Nome: %s \n", pessoa->nome);
          printf(" celular: %s \n", pessoa->Celular);
          printf(" Endereco: %s \n", pessoa->Endereco);
-         printf(" Cep: %d \n", pessoa->cep);
+         printf(" Cep: %lld \n", pessoa->cep);
          printf(" Nascimento: %s \n\n", pessoa->Data);
 
        }
@@ -122,12 +116,17 @@ char (*lines)[101] = NULL;
    break;
 
     case '4':{
-    imprimir(li);
+      Lista  *organizada = ordena(li);
+      imprimir(organizada);
+
     break;
 
      case '5':
+     imprimir(li);
      salva_arquivo(li);
      Libera_lista(li);
+     Libera_lista(organizada);
+}
        break;
 
      default:
@@ -135,7 +134,7 @@ char (*lines)[101] = NULL;
      printf("Opção inválida; Tente novamente.\n");
 
 
-    }
+
 
     }
   }
