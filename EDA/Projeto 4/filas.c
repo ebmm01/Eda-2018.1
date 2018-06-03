@@ -23,6 +23,28 @@ void libera_Fila(Fila* fi){
   }
 }
 
+void imprime_Fila(Fila* li){
+  Fila* p = li;
+  Elem* no = p->inicio;
+  if(no == NULL){
+  printf("Lista vazia\n");
+  //exit(1);
+
+  } else {
+
+    while(&(*no) != NULL){
+      printf(" Codigo: %s \n", no->dados.codigo);
+      printf(" Status: %s \n", no->dados.status);
+      printf(" Gasol: %s \n", no->dados.gasol);
+      printf(" Horario: %d \n", no->dados.horario);
+      printf(" Numero da pista: %d \n\n", no->dados.npista);
+        no =no->prox;
+    }
+
+}
+}
+
+
 int tamanho_Fila(Fila* fi){
   if (fi == NULL) return 0;
   int cont = 0;
@@ -72,4 +94,8 @@ int consulta_Fila(Fila* fi, struct aviao *al){
     return 0;
   *al = fi->inicio->dados;
   return 1;
+}
+
+int aleatorio(int min, int max){
+   return min + rand() / (RAND_MAX / (max - min + 1) + 1);
 }

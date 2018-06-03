@@ -23,6 +23,8 @@ Fila* cria_Fila();
 
 void libera_Fila(Fila* fi);
 
+void imprime_Fila(Fila* li);
+
 int tamanho_Fila(Fila* fi);
 
 int Fila_vazia(Fila* fi);
@@ -33,4 +35,16 @@ int remove_Fila(Fila* fi);
 
 int consulta_Fila(Fila* fi, struct aviao *al);
 
+int aleatorio(int min, int max);
+
 #endif
+
+//Funções da biblioteca:
+
+/*
+int x = tamanho_Fila(fi);
+int y = Fila_vazia(fi);
+int z = insere_Fila(fi, dados_aluno);
+int w = remove_Fila(fi);
+int x = consulta_Fila(fi, &dados_aluno);
+*/
