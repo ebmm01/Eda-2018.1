@@ -35,7 +35,9 @@ int consulta_Fila(Fila* fi, struct aviao *al);
 
 int aleatorio(int min, int max);
 
-void insere_Voo(Fila* li, char* codigo, char t);
+void insere_Voo(Fila* li,char* codigo, char t, int gasol, int preenche);
+
+Fila* gerencia_Fila(Fila* li, Fila* destino);
 
 #endif
 

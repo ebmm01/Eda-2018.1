@@ -8,8 +8,9 @@
 
 int main() {
 
-  Fila *fi;
+  Fila *fi, *gerenciada;
   fi = cria_Fila();
+  gerenciada = cria_Fila();
   struct aviao teste;
 
 
@@ -28,20 +29,38 @@ int main() {
   "AZ1008"
   };
 srand(time(NULL));
-int NVoos = aleatorio(20,64);
+
 int NApro = aleatorio(10,32);
-int NDec = NVoos - NApro;
-printf("Nvoos: %d \n NApro: %d\n", NVoos, NApro );
+int NDec = aleatorio(10,32);
+int NVoos = NApro + NDec;
 /*Preenchendo o campo de codigos nos primeiros voos na lista de eventos*/
 for(int i=0;i<NApro;i++)
-    insere_Voo(fi,db[i],'a');
+    insere_Voo(fi,db[i],'a',0,1);
 /*Preenchendo o campo de codigos os restantes dos voos com na lista de eventos*/
 for(int i=NApro;i<NVoos;i++)
-    insere_Voo(fi,db[i],'d');
+    insere_Voo(fi,db[i],'d',0,1);
+
+
 
 
 imprime_Fila(fi);
+printf("============================================\n" );
+gerenciada = gerencia_Fila(fi, gerenciada);
+imprime_Fila(gerenciada);
+
+time_t now;
+struct tm *now_tm;
+int hour;
+int min;
+now = time(NULL);
+now_tm = localtime(&now);
+hour = now_tm->tm_hour;
+min = now_tm->tm_min;
+printf("============================================\n" );
+printf("Hora: %d:%d \n",hour, min );
 printf("Tamanho da fila: %d\n",tamanho_Fila(fi));
+printf("Nvoos: %d \n NApro: %d\n NDec: %d\n", NVoos, NApro, NDec );
+printf("Tamanho da fila gerenciada: %d\n",tamanho_Fila(gerenciada));
 libera_Fila(fi);
   return 0;
 }

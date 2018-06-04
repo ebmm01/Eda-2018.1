@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "filas.h"
+#include <stdbool.h>
 
 Fila* cria_Fila(){
   Fila* fi = (Fila*) malloc(sizeof(Fila));
@@ -99,13 +100,32 @@ int aleatorio(int min, int max){
    return min + rand() / (RAND_MAX / (max - min + 1) + 1);
 }
 
-void insere_Voo(Fila* li,char* codigo, char t){
+void insere_Voo(Fila* li,char* codigo, char t, int gasol, int preenche){
   struct aviao *voo = (struct aviao*)malloc(sizeof(struct aviao));
      strcpy(voo->codigo, codigo);
-     if(t=='d')
-        voo->gasol = 12;
-     else
-         voo->gasol = aleatorio(0,12);
+     if(preenche == 1){
+       if(t=='d')
+          voo->gasol = 12;
+       else
+           voo->gasol = aleatorio(0,12);
+     }
+     else voo->gasol = gasol;
      voo->status = t;
      insere_Fila(li,*voo);
+}
+
+Fila* gerencia_Fila(Fila* li, Fila* destino){
+  if(li == NULL) return 0;
+  Elem *no = (Elem*) malloc(sizeof(Elem));
+  no = li->inicio;
+  for (int j = 0; j<=12; j++){
+  for (int i = 0; i<tamanho_Fila(li); i++){
+    if(no->dados.gasol == j){
+      insere_Voo(destino, no->dados.codigo, no->dados.status,no->dados.gasol, 2);
+    }
+    no = no->prox;
+  }
+  no = li->inicio;
+}
+  return destino;
 }
