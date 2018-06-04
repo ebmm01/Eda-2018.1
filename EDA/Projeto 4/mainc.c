@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#define unTempo 5
 #include "filas.h"
 
 
@@ -9,11 +10,12 @@ int main() {
 
   time_t now;
   struct tm *now_tm;
-  int hour,min, comb0;
+  int hora_pista_1,hora_pista_2,hora_pista_3,hora_inicial,
+      min_pista_1,min_pista_2,min_pista_3, min_inicial;
   now = time(NULL);
   now_tm = localtime(&now);
-  hour = now_tm->tm_hour;
-  min = now_tm->tm_min;
+  hora_inicial=hora_pista_1 = hora_pista_2 = hora_pista_3 = now_tm->tm_hour;
+  min_inicial=min_pista_1 = min_pista_2 = min_pista_3 = now_tm->tm_min;
   Fila *fi, *pouso,*decolagem;
   fi = cria_Fila();
   pouso = cria_Fila();
@@ -49,14 +51,13 @@ pouso = gerencia_Fila(fi, pouso, 'a');
 decolagem = gerencia_Fila(fi, decolagem, 'd');
 libera_Fila(fi);
 
-
   printf("---------------------------------------------------------------------------------\n");
   printf("Aeroporto Internacional de Brasília\n");
-  printf("Hora Inicial: %d:%d\n",hour,min);
+  printf("Hora Inicial: %d:%d\n",hora_inicial,min_inicial);
   printf("Fila de Pedidos: [código do voo – P/D – prioridade]\n");
-  printf("Número de voos: %d\n", NVoos);
-  printf("Número de aproximações: %d\n", NApro);
-  printf("Número de decolagens: %d\n", NDec);
+  printf("NVoos: %d\n", NVoos);
+  printf("Naproximações: %d\n", NApro);
+  printf("NDecolagens: %d\n", NDec);
   printf("---------------------------------------------------------------------------------\n\n\n");
   printf("Listagem de eventos:\n\n\n");
 
@@ -76,24 +77,32 @@ libera_Fila(fi);
     //Pista 1//
     if(pista[0] == 0) {
       if(pouso->inicio != NULL) {
-        procedimento(pouso,1, hour, min,'p');
-        pista[0] = 3;
+        procedimento(pouso,1, hora_pista_1, min_pista_1,'p');
+        pista[0] = 4;
+        min_pista_1+=4*unTempo;
+        calc_Hora(&hora_pista_1,&min_pista_1);
       }
       else if(decolagem->inicio != NULL){
-        procedimento(decolagem,1, hour, min, 'd');
+        procedimento(decolagem,1, hora_pista_1, min_pista_1, 'd');
         pista[0] = 2;
+        min_pista_1+=2*unTempo;
+        calc_Hora(&hora_pista_1,&min_pista_1);
       }
     }
 
     //Pista 2//
     if(pista[1] == 0) {
       if(pouso->inicio != NULL) {
-        procedimento(pouso,2, hour, min, 'p');
-        pista[1] = 3;
+        procedimento(pouso,2, hora_pista_2,min_pista_2, 'p');
+        pista[1] = 4;
+        min_pista_2+=4*unTempo;
+        calc_Hora(&hora_pista_2,&min_pista_2);
       }
       else if(decolagem->inicio != NULL) {
-        procedimento(decolagem,2, hour, min, 'd');
+        procedimento(decolagem,2, hora_pista_2,min_pista_2, 'd');
         pista[1] = 2;
+        min_pista_2+=2*unTempo;
+        calc_Hora(&hora_pista_2,&min_pista_2);
       }
     }
 
@@ -101,8 +110,10 @@ libera_Fila(fi);
     //Pista 3//
     if(comb0 >= 3) {
       if(pista[2] == 0) {
-        procedimento(pouso,3, hour, min, 'p');
-        pista[2] = 3;
+        procedimento(pouso,3, hora_pista_3,min_pista_3, 'p');
+        pista[2] = 4;
+        min_pista_3+=4*unTempo;
+        calc_Hora(&hora_pista_3,&min_pista_3);
       }
       Elem *queda = pouso->inicio;
       while(queda != NULL) {
@@ -118,8 +129,10 @@ libera_Fila(fi);
 
     if(pista[2] == 0) {
       if(decolagem->inicio != NULL) {
-        procedimento(decolagem,3, hour, min, 'd');
+        procedimento(decolagem,3, hora_pista_3, min_pista_3, 'd');
         pista[2] = 2;
+        min_pista_3+=2*unTempo;
+        calc_Hora(&hora_pista_3,&min_pista_3);
       }
     }
 
@@ -129,8 +142,8 @@ libera_Fila(fi);
 
     if(pista[2] > 0) pista[2]--;
 
-    min+= 5;
-    calc_Hora(&hour, &min);
+    //min+= 5;
+    //calc_Hora(&hour, &min);
 
     if(verifica_gas%10 == 0) {
       reduz_comb(pouso);
