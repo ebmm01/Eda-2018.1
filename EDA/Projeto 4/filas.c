@@ -129,3 +129,17 @@ Fila* gerencia_Fila(Fila* li, Fila* destino){
 }
   return destino;
 }
+
+void calc_Hora(int *hora, int *min){
+  if (*min>= 60){
+    if (*min == 60){
+      *min = 0;
+      *hora+=1;
+    }
+    else{
+      *min -= 60;
+      *hora+=1;
+    }
+
+  }
+}

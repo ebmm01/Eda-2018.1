@@ -5,16 +5,20 @@
 #include "filas.h"
 
 
-
 int main() {
 
+  time_t now;
+  struct tm *now_tm;
+  int hour;
+  int min;
+  now = time(NULL);
+  now_tm = localtime(&now);
+  hour = now_tm->tm_hour;
+  min = now_tm->tm_min;
   Fila *fi, *gerenciada;
   fi = cria_Fila();
   gerenciada = cria_Fila();
-  struct aviao teste;
-
-
-
+  //struct aviao teste;
 
   char db[][7] = {
   "VG3001", "JJ4404", "LN7001", "TG1501", "GL7602", "TT1010", "AZ1009",
@@ -33,31 +37,23 @@ srand(time(NULL));
 int NApro = aleatorio(10,32);
 int NDec = aleatorio(10,32);
 int NVoos = NApro + NDec;
-/*Preenchendo o campo de codigos nos primeiros voos na lista de eventos*/
+
 for(int i=0;i<NApro;i++)
     insere_Voo(fi,db[i],'a',0,1);
-/*Preenchendo o campo de codigos os restantes dos voos com na lista de eventos*/
+
 for(int i=NApro;i<NVoos;i++)
     insere_Voo(fi,db[i],'d',0,1);
-
-
-
 
 imprime_Fila(fi);
 printf("============================================\n" );
 gerenciada = gerencia_Fila(fi, gerenciada);
 imprime_Fila(gerenciada);
-
-time_t now;
-struct tm *now_tm;
-int hour;
-int min;
-now = time(NULL);
-now_tm = localtime(&now);
-hour = now_tm->tm_hour;
-min = now_tm->tm_min;
 printf("============================================\n" );
 printf("Hora: %d:%d \n",hour, min );
+min+= 40;
+calc_Hora(&hour,&min);
+printf("Hora: %d:%d \n",hour, min );
+
 printf("Tamanho da fila: %d\n",tamanho_Fila(fi));
 printf("Nvoos: %d \n NApro: %d\n NDec: %d\n", NVoos, NApro, NDec );
 printf("Tamanho da fila gerenciada: %d\n",tamanho_Fila(gerenciada));

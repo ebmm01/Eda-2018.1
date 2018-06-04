@@ -39,6 +39,8 @@ void insere_Voo(Fila* li,char* codigo, char t, int gasol, int preenche);
 
 Fila* gerencia_Fila(Fila* li, Fila* destino);
 
+void calc_Hora(int *hora, int *min);
+
 #endif
 
 //Funções da biblioteca:
