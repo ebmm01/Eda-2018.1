@@ -41,7 +41,7 @@ void imprime_Fila(Fila* li){
         no =no->prox;
     }
 
-}
+  }
 }
 
 
@@ -96,6 +96,24 @@ int consulta_Fila(Fila* fi, struct aviao *al){
   return 1;
 }
 
+int verifica_comb0(Fila* li){
+  Fila* p = li;
+  Elem* no = p->inicio;
+  int comb=0;
+  if(no == NULL){
+  printf("Lista vazia\n");
+  //exit(1);
+
+  } else {
+
+    while(&(*no) != NULL){
+        if (no->dados.gasol== 0) comb++;
+        no =no->prox;
+    }
+  }
+  return comb;
+}
+
 int aleatorio(int min, int max){
    return min + rand() / (RAND_MAX / (max - min + 1) + 1);
 }
@@ -114,14 +132,15 @@ void insere_Voo(Fila* li,char* codigo, char t, int gasol, int preenche){
      insere_Fila(li,*voo);
 }
 
-Fila* gerencia_Fila(Fila* li, Fila* destino){
+Fila* gerencia_Fila(Fila* li, Fila* destino, char tipo){
   if(li == NULL) return 0;
   Elem *no = (Elem*) malloc(sizeof(Elem));
   no = li->inicio;
   for (int j = 0; j<=12; j++){
   for (int i = 0; i<tamanho_Fila(li); i++){
-    if(no->dados.gasol == j){
+    if(no->dados.gasol == j && no->dados.status == tipo){
       insere_Voo(destino, no->dados.codigo, no->dados.status,no->dados.gasol, 2);
+
     }
     no = no->prox;
   }
@@ -141,5 +160,21 @@ void calc_Hora(int *hora, int *min){
       *hora+=1;
     }
 
+  }
+}
+
+void reduz_comb(Fila* li){
+  Fila* p = li;
+  Elem* no = p->inicio;
+  if(no == NULL){
+  printf("Lista vazia\n");
+  //exit(1);
+
+  } else {
+
+    while(&(*no) != NULL){
+        no->dados.gasol -=1;
+        no =no->prox;
+    }
   }
 }
