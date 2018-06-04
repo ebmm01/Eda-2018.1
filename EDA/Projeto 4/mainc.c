@@ -45,43 +45,8 @@ for(int i=0;i<NApro;i++)
 for(int i=NApro;i<NVoos;i++)
     insere_Voo(fi,db[i],'d',0,1);
 
-//imprime_Fila(fi);
-//printf("============================================\n" );
 pouso = gerencia_Fila(fi, pouso, 'a');
-//imprime_Fila(pouso);
-//printf("============================================\n" );
 decolagem = gerencia_Fila(fi, decolagem, 'd');
-//imprime_Fila(decolagem);
-printf("============================================\n" );
-printf("Hora: %d:%d \n",hour, min );
-/*min+= 3;
-calc_Hora(&hour,&min);
-printf("Hora: %d:%d \n",hour, min );*/
-
-//("Tamanho da fila: %d\n",tamanho_Fila(fi));
-//printf("Nvoos: %d \n NApro: %d\n NDec: %d\n", NVoos, NApro, NDec );
-//printf("Tamanho da fila gerenciada: %d\n",tamanho_Fila(gerenciada));
-
-/*while(1){
-  insere_Voo(pista[0],
-    gerenciada->inicio->dados.codigo,
-    gerenciada->inicio->dados.status,
-    gerenciada->inicio->dados.gasol,
-    0);
-  gerenciada = gerenciada->inicio->prox;
-  insere_Voo(pista[1],
-    gerenciada->inicio->dados.codigo,
-    gerenciada->inicio->dados.status,
-    gerenciada->inicio->dados.gasol,
-    0);
-
-}*/
-//comb0 = verifica_comb0(pouso);
-//printf(" Aviões com gasolina crítica: %d\n", comb0 );
-//reduz_comb(pouso);
-//comb0 = verifica_comb0(pouso);
-//printf(" Aviões com gasolina crítica: %d\n", comb0 );
-//imprime_Fila(pouso);
 libera_Fila(fi);
 
 
@@ -89,137 +54,93 @@ libera_Fila(fi);
   printf("Aeroporto Internacional de Brasília\n");
   printf("Hora Inicial: %d:%d\n",hour,min);
   printf("Fila de Pedidos: [código do voo – P/D – prioridade]\n");
-  //printf("NVoos: %d\n", nVoos);
-  //printf("Naproximações: %d\n", nAprox);
-  //printf("NDecolagens: %d\n", nDecol);
+  printf("Número de voos: %d\n", NVoos);
+  printf("Número de aproximações: %d\n", NApro);
+  printf("Número de decolagens: %d\n", NDec);
   printf("---------------------------------------------------------------------------------\n\n\n");
   printf("Listagem de eventos:\n\n\n");
 
-
-  //~~~~~~~~~~~~~~~~/LÓGICA DO VOO/~~~~~~~~~~~~~~~~/
-
   int verifica_gas = 1;
-  int pista_1 = 0, pista_2 = 0, pista_3 = 0;
+  int pista[3] = {0,0,0};
 
   while(pouso->inicio != NULL || decolagem->inicio != NULL) {
 
-    //Verificação de Emergência//
-    int gas_zero = 0;
+    int comb0 = 0;
 
-    gas_zero = verifica_comb0(pouso);
+    comb0 = verifica_comb0(pouso);
 
-    if(gas_zero >= 3) {
+    if(comb0 >= 3) {
       printf("\n\nALERTA GERAL DE DESVIO DE AERONAVE\n\n\n");
-
     }
 
     //Pista 1//
-    if(pista_1 == 0) {
+    if(pista[0] == 0) {
       if(pouso->inicio != NULL) {
-        printf("Código do voo: %s\n", pouso->inicio->dados.codigo);
-        printf("Status: [Aeronave Pousou]\n");
-        printf("Horário do ínicio do procedimento: %d:%d\n", hour, min);
-        printf("Número da pista: 1\n\n");
-        pista_1 = 3;
-        remove_Fila(pouso);
+        procedimento(pouso,1, hour, min,'p');
+        pista[0] = 3;
       }
       else if(decolagem->inicio != NULL){
-        printf("Código do voo: %s\n", decolagem->inicio->dados.codigo);
-        printf("Status: [Aeronave Decolou]\n");
-        printf("Horário do ínicio do procedimento: %d:%d\n", hour, min);
-        printf("Número da pista: 1\n\n");
-        pista_1 = 2;
-        remove_Fila(decolagem);
+        procedimento(decolagem,1, hour, min, 'd');
+        pista[0] = 2;
       }
     }
 
-
     //Pista 2//
-    if(pista_2 == 0) {
+    if(pista[1] == 0) {
       if(pouso->inicio != NULL) {
-        printf("Código do voo: %s\n", pouso->inicio->dados.codigo);
-        printf("Status: [Aeronave Pousou]\n");
-        printf("Horário do ínicio do procedimento: %d:%d\n", hour, min);
-        printf("Número da pista: 2\n\n");
-        pista_2 = 3;
-        remove_Fila(pouso);
+        procedimento(pouso,2, hour, min, 'p');
+        pista[1] = 3;
       }
       else if(decolagem->inicio != NULL) {
-        printf("Código do voo: %s\n", decolagem->inicio->dados.codigo);
-        printf("Status: [Aeronave Decolou]\n");
-        printf("Horário do ínicio do procedimento: %d:%d\n", hour, min);
-        printf("Número da pista: 2\n\n");
-        pista_2 = 2;
-        remove_Fila(decolagem);
+        procedimento(decolagem,2, hour, min, 'd');
+        pista[1] = 2;
       }
     }
 
 
     //Pista 3//
-    if(gas_zero >= 3) {
-      if(pista_3 == 0) {
-        printf("Código do voo: %s\n", pouso->inicio->dados.codigo);
-        printf("Status: [Aeronave Pousou]\n");
-        printf("Horário do ínicio do procedimento: %d:%d\n", hour, min);
-        printf("Número da pista: 3\n\n");
-        pista_3 = 3;
-        remove_Fila(pouso);
+    if(comb0 >= 3) {
+      if(pista[2] == 0) {
+        procedimento(pouso,3, hour, min, 'p');
+        pista[2] = 3;
       }
-      Elem *avioes_que_caem = pouso->inicio;
-      while(avioes_que_caem != NULL) {
-        if(avioes_que_caem->dados.gasol == 0) {
+      Elem *queda = pouso->inicio;
+      while(queda != NULL) {
+        if(queda->dados.gasol == 0) {
           printf("ALERTA CRÍTICO: Aeronave irá cair\n");
-          printf("Código do voo: %s\n", avioes_que_caem->dados.codigo);
+          printf("Código do voo: %s\n", queda->dados.codigo);
           printf("Status: [Aeronave Caiu]\n\n");
-          printf("teu cu\n");
           remove_Fila(pouso);
         }
-        avioes_que_caem = avioes_que_caem->prox;
+        queda = queda->prox;
       }
     }
 
-    if(pista_3 == 0) {
+    if(pista[2] == 0) {
       if(decolagem->inicio != NULL) {
-        printf("Código do voo: %s\n", decolagem->inicio->dados.codigo);
-        printf("Status: [Aeronave Decolou]\n");
-        printf("Horário do ínicio do procedimento: %d:%d\n", hour, min);
-        printf("Número da pista: 3\n\n");
-        pista_3 = 2;
-        remove_Fila(decolagem);
+        procedimento(decolagem,3, hour, min, 'd');
+        pista[2] = 2;
       }
     }
 
+    if(pista[0] > 0) pista[0]--;
 
+    if(pista[1] > 0) pista[1]--;
 
-    //Verificação de Rotina//
-    if(pista_1 > 0){
-      pista_1--;
-    }
-
-    if(pista_2 > 0){
-      pista_2--;
-    }
-
-    if(pista_3 > 0){
-      pista_3--;
-    }
+    if(pista[2] > 0) pista[2]--;
 
     min+= 5;
     calc_Hora(&hour, &min);
 
     if(verifica_gas%10 == 0) {
       reduz_comb(pouso);
-
     }
-
     verifica_gas++;
 
   }
 
   libera_Fila(pouso);
   libera_Fila(decolagem);
-
-  /////////////////////////////Printagem/////////////////////////////////
 
   printf("----Final do programa-------------------------------------------------\n");
   return 0;

@@ -28,19 +28,13 @@ void libera_Fila(Fila* fi){
 void imprime_Fila(Fila* li){
   Fila* p = li;
   Elem* no = p->inicio;
-  if(no == NULL){
-  printf("Lista vazia\n");
-  //exit(1);
-
-  } else {
-
+  if(no != NULL){
     while(&(*no) != NULL){
       printf(" Codigo: %s \n", no->dados.codigo);
       printf(" Status: %c \n", no->dados.status);
       printf(" Gasol: %d \n", no->dados.gasol);
-        no =no->prox;
+      no =no->prox;
     }
-
   }
 }
 
@@ -100,12 +94,7 @@ int verifica_comb0(Fila* li){
   Fila* p = li;
   Elem* no = p->inicio;
   int comb=0;
-  if(no == NULL){
-  printf("Lista vazia\n");
-  //exit(1);
-
-  } else {
-
+  if(no != NULL){
     while(&(*no) != NULL){
         if (no->dados.gasol== 0) comb++;
         no =no->prox;
@@ -166,15 +155,21 @@ void calc_Hora(int *hora, int *min){
 void reduz_comb(Fila* li){
   Fila* p = li;
   Elem* no = p->inicio;
-  if(no == NULL){
-  printf("Lista vazia\n");
-  //exit(1);
-
-  } else {
-
+  if(no != NULL){
     while(&(*no) != NULL){
         no->dados.gasol -=1;
         no =no->prox;
     }
   }
+}
+
+void procedimento(Fila* li,int num,int hour, int min, char status){
+  printf("Código do voo: %s\n", li->inicio->dados.codigo);
+  if (status == 'p')
+    printf("Status: [Aeronave Pousou]\n");
+  if (status == 'd')
+    printf("Status: [Aeronave Decolou]\n");
+  printf("Horário do ínicio do procedimento: %d:%d\n", hour, min);
+  printf("Número da pista: %d\n\n", num);
+  remove_Fila(li);
 }

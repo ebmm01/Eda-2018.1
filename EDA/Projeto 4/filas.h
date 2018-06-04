@@ -45,6 +45,8 @@ void calc_Hora(int *hora, int *min);
 
 void reduz_comb(Fila* li);
 
+void procedimento(Fila* li,int num,int hour, int min, char status);
+
 #endif
 
 //Funções da biblioteca:
