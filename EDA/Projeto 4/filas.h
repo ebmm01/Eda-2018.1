@@ -2,11 +2,9 @@
 #define filas
 
 struct aviao{
-  char *codigo;
-  char *status;
-  char *gasol;
-  int horario;
-  int npista;
+  char codigo[7];
+  char status;
+  int gasol;
 };
 
 typedef struct elemento{
@@ -36,6 +34,8 @@ int remove_Fila(Fila* fi);
 int consulta_Fila(Fila* fi, struct aviao *al);
 
 int aleatorio(int min, int max);
+
+void insere_Voo(Fila* li, char* codigo, char t);
 
 #endif
 

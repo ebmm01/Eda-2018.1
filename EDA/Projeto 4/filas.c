@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "filas.h"
 
 Fila* cria_Fila(){
@@ -34,10 +35,8 @@ void imprime_Fila(Fila* li){
 
     while(&(*no) != NULL){
       printf(" Codigo: %s \n", no->dados.codigo);
-      printf(" Status: %s \n", no->dados.status);
-      printf(" Gasol: %s \n", no->dados.gasol);
-      printf(" Horario: %d \n", no->dados.horario);
-      printf(" Numero da pista: %d \n\n", no->dados.npista);
+      printf(" Status: %c \n", no->dados.status);
+      printf(" Gasol: %d \n", no->dados.gasol);
         no =no->prox;
     }
 
@@ -71,7 +70,7 @@ int insere_Fila(Fila* fi, struct aviao al){
   if (fi->final == NULL)
     fi->inicio = no;
   else
-    fi->inicio = no;
+    fi->final->prox = no;
   fi->final = no;
   return 1;
 }
@@ -98,4 +97,15 @@ int consulta_Fila(Fila* fi, struct aviao *al){
 
 int aleatorio(int min, int max){
    return min + rand() / (RAND_MAX / (max - min + 1) + 1);
+}
+
+void insere_Voo(Fila* li,char* codigo, char t){
+  struct aviao *voo = (struct aviao*)malloc(sizeof(struct aviao));
+     strcpy(voo->codigo, codigo);
+     if(t=='d')
+        voo->gasol = 12;
+     else
+         voo->gasol = aleatorio(0,12);
+     voo->status = t;
+     insere_Fila(li,*voo);
 }
