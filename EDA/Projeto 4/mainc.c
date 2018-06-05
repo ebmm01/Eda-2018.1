@@ -21,7 +21,7 @@ int main() {
   pouso = cria_Fila();
   decolagem = cria_Fila();
 
-// Database
+  // Database
   char db[][7] = {
   "VG3001", "JJ4404", "LN7001", "TG1501", "GL7602", "TT1010", "AZ1009",
   "AZ1010", "TG1506", "VG3002", "JJ4402", "GL7603", "RL7880", "AL0012",
@@ -35,21 +35,21 @@ int main() {
   "AZ1008"
   };
 
-srand(time(NULL));
+  srand(time(NULL));
 
-int NApro = aleatorio(10,32);
-int NDec = aleatorio(10,32);
-int NVoos = NApro + NDec;
+  int NApro = aleatorio(10,32);
+  int NDec = aleatorio(10,32);
+  int NVoos = NApro + NDec;
 
-for(int i=0;i<NApro;i++)
-    insere_Voo(fi,db[i],'a',0,1);
+  for(int i=0;i<NApro;i++)
+      insere_Voo(fi,db[i],'a',0,1);
 
-for(int i=NApro;i<NVoos;i++)
-    insere_Voo(fi,db[i],'d',0,1);
+  for(int i=NApro;i<NVoos;i++)
+      insere_Voo(fi,db[i],'d',0,1);
 
-pouso = gerencia_Fila(fi, pouso, 'a');
-decolagem = gerencia_Fila(fi, decolagem, 'd');
-libera_Fila(fi);
+  pouso = gerencia_Fila(fi, pouso, 'a');
+  decolagem = gerencia_Fila(fi, decolagem, 'd');
+  libera_Fila(fi);
 
   printf("---------------------------------------------------------------------------------\n");
   printf("Aeroporto Internacional de Brasília\n");
@@ -61,8 +61,7 @@ libera_Fila(fi);
   printf("---------------------------------------------------------------------------------\n\n\n");
   printf("Listagem de eventos:\n\n\n");
 
-  int verifica_gas = 1;
-  int pista[3] = {0,0,0};
+  int pista[3] = {0,0,0}, verifica_tempo=0;
 
   while(pouso->inicio != NULL || decolagem->inicio != NULL) {
 
@@ -74,7 +73,7 @@ libera_Fila(fi);
       printf("\n\nALERTA GERAL DE DESVIO DE AERONAVE\n\n\n");
     }
 
-    //Pista 1//
+    //Pista 1
     if(pista[0] == 0) {
       if(pouso->inicio != NULL) {
         procedimento(pouso,1, hora_pista_1, min_pista_1,'p');
@@ -90,7 +89,7 @@ libera_Fila(fi);
       }
     }
 
-    //Pista 2//
+    //Pista 2
     if(pista[1] == 0) {
       if(pouso->inicio != NULL) {
         procedimento(pouso,2, hora_pista_2,min_pista_2, 'p');
@@ -106,8 +105,7 @@ libera_Fila(fi);
       }
     }
 
-
-    //Pista 3//
+    //Pista 3
     if(comb0 >= 3) {
       if(pista[2] == 0) {
         procedimento(pouso,3, hora_pista_3,min_pista_3, 'p');
@@ -142,19 +140,17 @@ libera_Fila(fi);
 
     if(pista[2] > 0) pista[2]--;
 
-    //min+= 5;
-    //calc_Hora(&hour, &min);
-
-    if(verifica_gas%10 == 0) {
+    if(verifica_tempo >= 50) {
       reduz_comb(pouso);
+      verifica_tempo-=50;
     }
-    verifica_gas++;
-
+    verifica_tempo+=unTempo;
   }
 
   libera_Fila(pouso);
   libera_Fila(decolagem);
 
   printf("----Final do programa-------------------------------------------------\n");
-  return 0;
+
+return 0;
 }

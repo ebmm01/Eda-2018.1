@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <string.h>
 #include "filas.h"
-#include <stdbool.h>
 
 Fila* cria_Fila(){
   Fila* fi = (Fila*) malloc(sizeof(Fila));
@@ -143,13 +142,17 @@ void calc_Hora(int *hora, int *min){
     if (*min == 60){
       *min = 0;
       *hora+=1;
+
     }
     else{
       *min -= 60;
       *hora+=1;
     }
-
+    if (*hora>23){
+      *hora=0;
+    }
   }
+
 }
 
 void reduz_comb(Fila* li){
@@ -169,7 +172,14 @@ void procedimento(Fila* li,int num,int hour, int min, char status){
     printf("Status: [Aeronave Pousou]\n");
   if (status == 'd')
     printf("Status: [Aeronave Decolou]\n");
-  printf("Horário do ínicio do procedimento: %d:%d\n", hour, min);
+  if(min<10 && hour>9)
+    printf("Horário do ínicio do procedimento: %d:0%d\n", hour, min);
+  if(min>10 && hour<9)
+    printf("Horário do ínicio do procedimento: 0%d:%d\n", hour, min);
+  if(min<10 && hour<9)
+    printf("Horário do ínicio do procedimento: 0%d:0%d\n", hour, min);
+  if(min>10 && hour>9)
+    printf("Horário do ínicio do procedimento: %d:%d\n", hour, min);
   printf("Número da pista: %d\n\n", num);
   remove_Fila(li);
 }

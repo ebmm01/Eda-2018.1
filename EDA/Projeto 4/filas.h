@@ -48,32 +48,3 @@ void reduz_comb(Fila* li);
 void procedimento(Fila* li,int num,int hour, int min, char status);
 
 #endif
-
-//Funções da biblioteca:
-
-/*
-<fila> = cria_Fila();
-
-libera_Fila(<fila>);
-
-imprime_Fila(<fila>);
-
-int x = tamanho_Fila(fi);
-
-int y = Fila_vazia(fi);
-
-int z = insere_Fila(fi, <struct aviao>);
-
-int w = remove_Fila(fi); -- destroi a fila
-
-int x = consulta_Fila(fi, <struct aviao>); -- consulta o primeiro da fila
-
-int num = aleatorio(min,max); --  onde min e max são o range
-
-insere_Voo(<fila>, codigo, tipo, gasol, preenche) -- onde caso não hava gasolina,
-o int preenche deve ser 1. Caso contrário será entendido que a gasolina já foi
-preenchida.
-
-
-
-*/
