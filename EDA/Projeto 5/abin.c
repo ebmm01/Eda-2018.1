@@ -68,6 +68,89 @@ void posOrdem_ArvBin(ArvBin *raiz){
     posOrdem_ArvBin(&((*raiz)->esquerdo));
     posOrdem_ArvBin(&((*raiz)->direito));
     printf("Valor: %d\n", (*raiz)->num);
-
   }
+}
+
+int  insere_ArvBin(ArvBin *raiz, int valor){
+  if (raiz == NULL) return 0;
+  struct NO* novo;
+  novo = (struct NO*) malloc(sizeof(struct NO));
+  if (novo == NULL) return 0;
+  novo->num = valor;
+  novo->esquerdo = NULL;
+  novo->direito = NULL;
+  if (*raiz == NULL) *raiz = novo;
+  else{
+    struct NO* atual = *raiz;
+    struct NO* anterior = NULL;
+    while(atual!=NULL){
+      anterior=atual;
+      if (valor == atual->num){
+        free(novo);
+        return 0; //elemento existe
+      }
+      if (valor > atual->num) atual = atual->direito;
+      else atual = atual->esquerdo;
+    }
+    if (valor > anterior->num) anterior->direito = novo;
+    else anterior->esquerdo = novo;
+  }
+  return 1;
+}
+
+int remove_ArvBin(ArvBin *raiz, int valor){
+  if (raiz == NULL) return 0;
+  struct NO* atual = *raiz;
+  struct NO* anterior = NULL;
+  while(atual!=NULL){
+    if (valor == atual->num){
+      if (atual == *raiz) *raiz = remove_atual(atual);
+      else{
+        if (anterior->direito == atual)
+          anterior->direito = remove_atual(atual);
+        else anterior->esquerdo = remove_atual(atual);
+      }
+      return 1;
+    }
+    anterior = atual;
+    if (valor > atual->num) atual = atual->direito;
+    else atual = atual->esquerdo;
+  }
+  return 1;
+}
+
+struct NO* remove_atual(struct NO *atual){
+  struct NO *no1, *no2;
+  if(atual->esquerdo == NULL){
+    no2 = atual->direito;
+    free(atual);
+    return no2;
+  }
+  no1 = atual;
+  no2 = atual->esquerdo;
+  while (no2->direito != NULL) {
+    no1 = no2;
+    no2 = no2->direito;
+  }
+
+  if (no1 != atual){
+    no1->direito = no2->esquerdo;
+    no2->esquerdo = atual->esquerdo;
+  }
+  no2->direito = atual->direito;
+  return no2;
+}
+
+int consulta_ArvBin(ArvBin *raiz, int valor){
+  if (raiz==NULL) return 0;
+  struct NO* atual = *raiz;
+  while(atual != NULL){
+    if(valor == atual ->num){
+      return 1;
+      //aqui outras coisas podem ser feitas.
+    }
+    if(valor > atual->num) atual = atual->direito;
+    else atual = atual->esquerdo;
+  }
+  return 0;
 }

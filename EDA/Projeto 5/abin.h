@@ -27,6 +27,14 @@ void emOrdem_ArvBin(ArvBin *raiz);
 
 void posOrdem_ArvBin(ArvBin *raiz);
 
+int  insere_ArvBin(ArvBin *raiz, int valor);
+
+int remove_ArvBin(ArvBin *raiz, int valor);
+
+struct NO* remove_atual(struct NO *atual);
+
+int consulta_ArvBin(ArvBin *raiz, int valor);
+
 #endif
 /* Chamada das funções
 
@@ -37,5 +45,7 @@ int x = n_NOS(raiz);
 preOrdem_ArvBin(raiz);
 emOrdem_ArvBin(raiz);
 posOrdem_ArvBin(raiz);
-
+int x = insere_ArvBin(raiz, valor);
+int x = remove_ArvBin(raiz, valor);
+int x = consulta_ArvBin(raiz, valor);
 */
