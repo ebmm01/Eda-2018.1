@@ -9,4 +9,16 @@ struct NO{
 
 typedef struct NO* ArvBin;
 
+ArvBin* cria_ArvBin();
+
+void libera_ArvBin(ArvBin *raiz);
+
+void libera_NO(struct NO* no);
+
+
 #endif
+/* Chamada das funções
+
+ArvBin* raiz = cria_ArvBin();
+
+*/
