@@ -21,3 +21,24 @@ void libera_NO(struct NO* no){
   free(no);
   no = NULL;
 }
+
+int estaVazia_ArvBin(ArvBin* raiz){
+    return (raiz == NULL || *raiz == NULL) ? 1 : 0;
+}
+
+int altura_ArvBin(ArvBin *raiz){
+  if (raiz == NULL || *raiz == NULL) return 0;
+  int lado_esquerdo = altura_ArvBin(&((*raiz)->esquerdo));
+  int lado_direito = altura_ArvBin(&((*raiz)->direito));
+  if (lado_esquerdo> lado_direito)
+    return (lado_esquerdo + 1);
+  else
+    return (lado_direito + 1);
+}
+
+int n_NOS(ArvBin *raiz){
+  if (raiz == NULL || *raiz == NULL) return 0;
+  int lado_esquerdo = altura_ArvBin(&((*raiz)->esquerdo));
+  int lado_direito = altura_ArvBin(&((*raiz)->direito));
+  return (lado_direito + lado_esquerdo + 1);
+}
