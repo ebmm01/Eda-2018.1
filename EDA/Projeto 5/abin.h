@@ -21,6 +21,12 @@ int altura_ArvBin(ArvBin *raiz);
 
 int n_NOS(ArvBin *raiz);
 
+void preOrdem_ArvBin(ArvBin *raiz);
+
+void emOrdem_ArvBin(ArvBin *raiz);
+
+void posOrdem_ArvBin(ArvBin *raiz);
+
 #endif
 /* Chamada das funções
 
@@ -28,6 +34,8 @@ ArvBin* raiz = cria_ArvBin();
 libera_ArvBin(raiz);
 int x = estaVazia_ArvBin(raiz);
 int x = n_NOS(raiz);
-
+preOrdem_ArvBin(raiz);
+emOrdem_ArvBin(raiz);
+posOrdem_ArvBin(raiz);
 
 */
