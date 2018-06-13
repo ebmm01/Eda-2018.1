@@ -35,6 +35,8 @@ struct NO* remove_atual(struct NO *atual);
 
 int consulta_ArvBin(ArvBin *raiz, int valor);
 
+ArvBin* loadTreeFromFile(char *name);
+
 #endif
 /* Chamada das funções
 

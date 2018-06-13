@@ -154,3 +154,30 @@ int consulta_ArvBin(ArvBin *raiz, int valor){
   }
   return 0;
 }
+
+ArvBin* loadTreeFromFile(char *name){
+  ArvBin* raiz = cria_ArvBin();
+  FILE *arquivo;
+  char filename[50];
+  sprintf(filename, "DB/%s.txt",name);
+  arquivo = fopen(filename, "r");
+  int *num;
+  num = (int*)malloc(11*sizeof(int));
+
+  if (arquivo == NULL){
+       printf("Não foi possível abrir o arquivo %s \n",filename);
+       exit(1);
+  }
+  
+  for (int i=0;i<1;i++){
+        for (int j=0;j<10;j++){
+           fscanf(arquivo,"%d ", (num+j));
+           printf("%d\n", *(num+j));
+           insere_ArvBin(raiz, *(num+j));
+        }
+  }
+
+  free(num);
+
+  return raiz;
+}
