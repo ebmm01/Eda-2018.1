@@ -168,7 +168,7 @@ ArvBin* loadTreeFromFile(char *name){
        printf("Não foi possível abrir o arquivo %s \n",filename);
        exit(1);
   }
-  
+
   for (int i=0;i<1;i++){
         for (int j=0;j<10;j++){
            fscanf(arquivo,"%d ", (num+j));
