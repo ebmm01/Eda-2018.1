@@ -6,7 +6,7 @@
 #define MAX_HEIGHT 1000
 int lprofile[MAX_HEIGHT];
 int rprofile[MAX_HEIGHT];
-#define INFINITY (1<<20)
+#define INFINITY 1048576
 
 int print_next;
 int gap = 3;
