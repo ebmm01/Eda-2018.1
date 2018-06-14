@@ -54,6 +54,8 @@ struct NO* remove_atual(struct NO *atual);
 
 int consulta_ArvBin(ArvBin *raiz, int valor);
 
+int isFull (ArvBin *raiz);
+
 ArvBin* loadTreeFromFile(char *name);
 
 void printElements(ArvBin *t);

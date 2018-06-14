@@ -125,6 +125,7 @@ int remove_ArvBin(ArvBin *raiz, int valor){
     if (valor > atual->num) atual = atual->direito;
     else atual = atual->esquerdo;
   }
+  printf("Valor não encontrado\n");
   return 1;
 }
 
@@ -162,6 +163,20 @@ int consulta_ArvBin(ArvBin *raiz, int valor){
     else atual = atual->esquerdo;
   }
   return 0;
+}
+
+int isFull (ArvBin *raiz){
+  struct NO* atual = *raiz;
+    if (raiz == NULL)
+        return 1;
+
+    if (atual->esquerdo == NULL && atual->direito == NULL)
+        return 1;
+
+    if ((atual->esquerdo) && (atual->direito))
+        return (isFull(&atual->esquerdo) && isFull(&atual->direito));
+
+    return 0;
 }
 
 ArvBin* loadTreeFromFile(char *name){

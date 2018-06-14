@@ -35,7 +35,8 @@ int  main(int argc, char const *argv[]) {
         break;
 
       case 3:
-        printf("NÂO IMPLEMENTADO");
+        if(isFull(raiz)) printf("Árove cheia!!\n");
+        else printf("Árvore não cheia.\n" );
         break;
 
       case 4:
@@ -48,10 +49,13 @@ int  main(int argc, char const *argv[]) {
         printf("\n\n%d\n\n",x);
         break;
 
-      case 6:
-        printf("NÂO IMPLEMENTADO");
+      case 6:{
+        int valor = 0;
+        printf("Insira o valor a ser removido");
+        scanf("%d", &valor);
+        remove_ArvBin(raiz,valor);
         break;
-
+      }
       case 7:
         emOrdem_ArvBin(raiz);
         break;
