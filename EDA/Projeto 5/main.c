@@ -1,20 +1,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "abin.h"
+#include "avl.h"
+
 
 void menu();
 
 int  main(int argc, char const *argv[]) {
+  ArvAVL* teste = NULL;
   ArvBin* raiz = cria_ArvBin();
   int escolha = 0;
   char nome[100];
-      int x = 0;
-  //raiz = loadTreeFromFile("bst2");
-  //printf("Testando a raiz:\n");
-
-  //emOrdem_ArvBin(raiz);
-
-  //printElements(raiz);
+  int x = 0;
 
   while(escolha != 11){
     //system("clear");
