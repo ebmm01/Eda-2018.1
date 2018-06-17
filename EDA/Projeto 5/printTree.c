@@ -5,21 +5,21 @@
 
 void showTree(ArvBin *t) {
     ArvBinPrint *raiz;
-    int xmin, i;
+    int minX, i;
     if (t == NULL) return;
-    raiz = build_ascii_tree(t);
+    raiz = insere_ArvBinPrint(t);
     filledge(raiz);
     for (i = 0; i < raiz->height && i < MAX_HEIGHT; i++) {
         lprofile[i] = INFINITY;
     }
     compute_profile(raiz, 0, 0, 'l');
-    xmin = 0;
+    minX = 0;
     for (i = 0; i < raiz->height && i < MAX_HEIGHT; i++) {
-        xmin = MIN(xmin, lprofile[i]);
+        minX = MIN(minX, lprofile[i]);
     }
     for (i = 0; i < raiz->height; i++) {
         print_next = 0;
-        printLevel(raiz, -xmin, i);
+        printLevel(raiz, -minX, i);
         printf("\n");
     }
     if (raiz->height >= MAX_HEIGHT) {
@@ -28,33 +28,33 @@ void showTree(ArvBin *t) {
     free_ascii_tree(raiz);
 }
 
-ArvBinPrint *build_ascii_tree_recursive(ArvBin *t) {
-    ArvBinPrint *node;
+ArvBinPrint *insere_ArvBinPrint_rec(ArvBin *t) {
+    ArvBinPrint *no;
     if ((*t) == NULL) return NULL;
-    node = malloc(sizeof(ArvBinPrint));
-    node->esquerdo = build_ascii_tree_recursive(&((*t)->esquerdo));
-    node->direito = build_ascii_tree_recursive(&((*t)->direito));
+    no = (ArvBinPrint*)malloc(sizeof(ArvBinPrint));
+    no->esquerdo = insere_ArvBinPrint_rec(&((*t)->esquerdo));
+    no->direito = insere_ArvBinPrint_rec(&((*t)->direito));
 
-    if (node->esquerdo != NULL) {
-        node->esquerdo->parent_dir = -1;
+    if (no->esquerdo != NULL) {
+        no->esquerdo->parent_dir = -1;
     }
 
-    if (node->direito != NULL) {
-        node->direito->parent_dir = 1;
+    if (no->direito != NULL) {
+        no->direito->parent_dir = 1;
     }
 
-    sprintf(node->label, "%d", (*t)->num);
-    node->elemento = strlen(node->label);
+    sprintf(no->label, "%d", (*t)->num);
+    no->elemento = strlen(no->label);
 
-    return node;
+    return no;
 }
 
 
 //Copy the tree into the ascii node structre
-ArvBinPrint *build_ascii_tree(ArvBin *t) {
+ArvBinPrint *insere_ArvBinPrint(ArvBin *t) {
     ArvBinPrint *node;
     if (t == NULL) return NULL;
-    node = build_ascii_tree_recursive(t);
+    node = insere_ArvBinPrint_rec(t);
     node->parent_dir = 0;
     return node;
 }

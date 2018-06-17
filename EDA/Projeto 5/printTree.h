@@ -25,9 +25,9 @@ int print_next;
 
 void showTree(ArvBin *t);
 
-ArvBinPrint *build_ascii_tree_recursive(ArvBin *t);
+ArvBinPrint *insere_ArvBinPrint_rec(ArvBin *t);
 
-ArvBinPrint *build_ascii_tree(ArvBin *t);
+ArvBinPrint *insere_ArvBinPrint(ArvBin *t);
 
 void free_ascii_tree(ArvBinPrint *node);
 

@@ -46,7 +46,8 @@ int  main(int argc, char const *argv[]) {
       case 5:
 
         x = altura_ArvBin(raiz);
-        printf("\n\n%d\n\n",x);
+        if (x >=0) printf("\n\n A altura da árvore é: %d\n\n",x);
+        else printf("\n\nRaiz nula.\n\n");
         break;
 
       case 6:{

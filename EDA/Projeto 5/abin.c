@@ -29,7 +29,8 @@ int estaVazia_ArvBin(ArvBin* raiz){
 }
 
 int altura_ArvBin(ArvBin *raiz){
-  if (raiz == NULL || *raiz == NULL) return 0;
+  if (raiz == NULL) return 0;
+  if (*raiz == NULL) return -1;
   int lado_esquerdo = altura_ArvBin(&((*raiz)->esquerdo));
   int lado_direito = altura_ArvBin(&((*raiz)->direito));
   if (lado_esquerdo> lado_direito)
@@ -145,14 +146,16 @@ struct NO* remove_atual(struct NO *atual){
 
 int consulta_ArvBin(ArvBin *raiz, int valor){
   if (raiz==NULL) return 0;
+  int nivel=0;
   struct NO* atual = *raiz;
   struct NO* ant = NULL;
   struct NO* irmao = NULL;
   while(atual != NULL){
-    if(valor == atual ->num){
+    if(valor == atual->num){
       printf("\n\nValor encontrado!\n");
+      printf("Nível do nó: %d\n",nivel );
       printf("Valor do pai: %d\n", ant->num);
-      if (irmao != NULL) printf(" Valor do irmão: %d\n", irmao->num);
+      if (irmao != NULL) printf("Valor do irmão: %d\n", irmao->num);
       else printf("Nó não tem irmao.\n\n");
       return 1;
     }
@@ -160,11 +163,13 @@ int consulta_ArvBin(ArvBin *raiz, int valor){
       ant = atual;
       irmao = ant->esquerdo;
       atual = atual->direito;
+      nivel++;
     }
     else{
       ant = atual;
       irmao = ant->direito;
       atual = atual->esquerdo;
+      nivel++;
     }
   }
   printf("Valor não encontrado.\n" );
@@ -175,13 +180,10 @@ int isFull (ArvBin *raiz){
   struct NO* atual = *raiz;
     if (raiz == NULL)
         return 1;
-
     if (atual->esquerdo == NULL && atual->direito == NULL)
         return 1;
-
     if ((atual->esquerdo) && (atual->direito))
         return (isFull(&atual->esquerdo) && isFull(&atual->direito));
-
     return 0;
 }
 
@@ -206,8 +208,6 @@ ArvBin* loadTreeFromFile(char *name){
            insere_ArvBin(raiz, *(num+j));
         }
   }
-
   free(num);
-
   return raiz;
 }
