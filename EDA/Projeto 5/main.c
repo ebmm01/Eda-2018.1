@@ -1,13 +1,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "abin.h"
-#include "avl.h"
+#include "printTree.h"
 
 
 void menu();
 
 int  main(int argc, char const *argv[]) {
-  ArvAVL* teste = NULL;
+  //ArvAVL* teste = NULL;
   ArvBin* raiz = cria_ArvBin();
   int escolha = 0;
   char nome[100];
