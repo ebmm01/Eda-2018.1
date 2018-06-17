@@ -27,8 +27,8 @@ int  main(int argc, char const *argv[]) {
         break;
 
       case 2:
-        printf("Printando raiz");
-        printElements(raiz);
+        printf("Printando raiz\n\n");
+        showTree(raiz);
         break;
 
       case 3:
@@ -36,10 +36,13 @@ int  main(int argc, char const *argv[]) {
         else printf("Árvore não cheia.\n" );
         break;
 
-      case 4:
-        printf("NÂO IMPLEMENTADO");
+      case 4:{
+        int valor;
+        printf("Insira o valor a ser pesquisado na Árvore\n\n");
+        scanf("%d",&valor);
+        consulta_ArvBin(raiz,valor);
         break;
-
+      }
       case 5:
 
         x = altura_ArvBin(raiz);

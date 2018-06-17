@@ -146,14 +146,28 @@ struct NO* remove_atual(struct NO *atual){
 int consulta_ArvBin(ArvBin *raiz, int valor){
   if (raiz==NULL) return 0;
   struct NO* atual = *raiz;
+  struct NO* ant = NULL;
+  struct NO* irmao = NULL;
   while(atual != NULL){
     if(valor == atual ->num){
+      printf("\n\nValor encontrado!\n");
+      printf("Valor do pai: %d\n", ant->num);
+      if (irmao != NULL) printf(" Valor do irmão: %d\n", irmao->num);
+      else printf("Nó não tem irmao.\n\n");
       return 1;
-      //aqui outras coisas podem ser feitas.
     }
-    if(valor > atual->num) atual = atual->direito;
-    else atual = atual->esquerdo;
+    if(valor > atual->num){
+      ant = atual;
+      irmao = ant->esquerdo;
+      atual = atual->direito;
+    }
+    else{
+      ant = atual;
+      irmao = ant->direito;
+      atual = atual->esquerdo;
+    }
   }
+  printf("Valor não encontrado.\n" );
   return 0;
 }
 

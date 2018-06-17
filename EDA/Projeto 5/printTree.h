@@ -21,8 +21,9 @@ struct ArvBinBusca {
 
 int lprofile[MAX_HEIGHT];
 int rprofile[MAX_HEIGHT];
+int print_next;
 
-void printElements(ArvBin *t);
+void showTree(ArvBin *t);
 
 ArvBinPrint *build_ascii_tree_recursive(ArvBin *t);
 
@@ -30,9 +31,7 @@ ArvBinPrint *build_ascii_tree(ArvBin *t);
 
 void free_ascii_tree(ArvBinPrint *node);
 
-void compute_lprofile(ArvBinPrint *node, int x, int y);
-
-void compute_rprofile(ArvBinPrint *node, int x, int y);
+void compute_profile(ArvBinPrint *node, int x, int y,char direction);
 
 void filledge(ArvBinPrint *node);
 

@@ -3,32 +3,29 @@
 #include <string.h>
 #include "printTree.h"
 
-int print_next;
-
-
-void printElements(ArvBin *t) {
-    ArvBinPrint *proot;
+void showTree(ArvBin *t) {
+    ArvBinPrint *raiz;
     int xmin, i;
     if (t == NULL) return;
-    proot = build_ascii_tree(t);
-    filledge(proot);
-    for (i = 0; i < proot->height && i < MAX_HEIGHT; i++) {
+    raiz = build_ascii_tree(t);
+    filledge(raiz);
+    for (i = 0; i < raiz->height && i < MAX_HEIGHT; i++) {
         lprofile[i] = INFINITY;
     }
-    compute_lprofile(proot, 0, 0);
+    compute_profile(raiz, 0, 0, 'l');
     xmin = 0;
-    for (i = 0; i < proot->height && i < MAX_HEIGHT; i++) {
+    for (i = 0; i < raiz->height && i < MAX_HEIGHT; i++) {
         xmin = MIN(xmin, lprofile[i]);
     }
-    for (i = 0; i < proot->height; i++) {
+    for (i = 0; i < raiz->height; i++) {
         print_next = 0;
-        printLevel(proot, -xmin, i);
+        printLevel(raiz, -xmin, i);
         printf("\n");
     }
-    if (proot->height >= MAX_HEIGHT) {
+    if (raiz->height >= MAX_HEIGHT) {
         printf("(This tree is taller than %d, and may be drawn incorrectly.)\n", MAX_HEIGHT);
     }
-    free_ascii_tree(proot);
+    free_ascii_tree(raiz);
 }
 
 ArvBinPrint *build_ascii_tree_recursive(ArvBin *t) {
@@ -74,32 +71,29 @@ void free_ascii_tree(ArvBinPrint *node) {
 //It assumes that the center of the label of the root of this tree
 //is located at a position (x,y).  It assumes that the edge_length
 //fields have been computed for this tree.
-void compute_lprofile(ArvBinPrint *node, int x, int y) {
-    int i, isleft;
+void compute_profile(ArvBinPrint *node, int x, int y, char direction) {
+    int i, isleft,notleft;
     if (node == NULL) return;
-    isleft = (node->parent_dir == -1);
-    lprofile[y] = MIN(lprofile[y], x - ((node->elemento - isleft) / 2));
-    if (node->esquerdo != NULL) {
-        for (i = 1; i <= node->edge_length && y + i < MAX_HEIGHT; i++) {
-            lprofile[y + i] = MIN(lprofile[y + i], x - i);
-        }
+    if (direction =='l'){
+      isleft = (node->parent_dir == -1);
+      lprofile[y] = MIN(lprofile[y], x - ((node->elemento - isleft) / 2));
+      if (node->esquerdo != NULL) {
+          for (i = 1; i <= node->edge_length && y + i < MAX_HEIGHT; i++) {
+              lprofile[y + i] = MIN(lprofile[y + i], x - i);
+          }
+      }
     }
-    compute_lprofile(node->esquerdo, x - node->edge_length - 1, y + node->edge_length + 1);
-    compute_lprofile(node->direito, x + node->edge_length + 1, y + node->edge_length + 1);
-}
-
-void compute_rprofile(ArvBinPrint *node, int x, int y) {
-    int i, notleft;
-    if (node == NULL) return;
-    notleft = (node->parent_dir != -1);
-    rprofile[y] = MAX(rprofile[y], x + ((node->elemento - notleft) / 2));
-    if (node->direito != NULL) {
-        for (i = 1; i <= node->edge_length && y + i < MAX_HEIGHT; i++) {
-            rprofile[y + i] = MAX(rprofile[y + i], x + i);
-        }
+    if (direction == 'r'){
+      notleft = (node->parent_dir != -1);
+      rprofile[y] = MAX(rprofile[y], x + ((node->elemento - notleft) / 2));
+      if (node->direito != NULL) {
+          for (i = 1; i <= node->edge_length && y + i < MAX_HEIGHT; i++) {
+              rprofile[y + i] = MAX(rprofile[y + i], x + i);
+          }
+      }
     }
-    compute_rprofile(node->esquerdo, x - node->edge_length - 1, y + node->edge_length + 1);
-    compute_rprofile(node->direito, x + node->edge_length + 1, y + node->edge_length + 1);
+    compute_profile(node->esquerdo, x - node->edge_length - 1, y + node->edge_length + 1, direction);
+    compute_profile(node->direito, x + node->edge_length + 1, y + node->edge_length + 1, direction);
 }
 
 //This function fills in the edge_length and
@@ -119,7 +113,7 @@ void filledge(ArvBinPrint *node) {
             for (i = 0; i < node->esquerdo->height && i < MAX_HEIGHT; i++) {
                 rprofile[i] = -INFINITY;
             }
-            compute_rprofile(node->esquerdo, 0, 0);
+            compute_profile(node->esquerdo, 0, 0, 'r');
             hmin = node->esquerdo->height;
         }
         else {
@@ -129,7 +123,7 @@ void filledge(ArvBinPrint *node) {
             for (i = 0; i < node->direito->height && i < MAX_HEIGHT; i++) {
                 lprofile[i] = INFINITY;
             }
-            compute_lprofile(node->direito, 0, 0);
+            compute_profile(node->direito, 0, 0, 'l');
             hmin = MIN(node->direito->height, hmin);
         }
         else {
