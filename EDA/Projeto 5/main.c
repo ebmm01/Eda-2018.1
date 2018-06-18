@@ -20,6 +20,7 @@ int  main(int argc, char const *argv[]) {
     scanf("%d", &escolha);
     switch (escolha) {
       case 1:
+        printf("Insira o nome do arquivo:\n\n");
         scanf("%s", nome);
         raiz = loadTreeFromFile(nome);
         printf("Arquivo aberto");

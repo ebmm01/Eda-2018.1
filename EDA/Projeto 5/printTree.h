@@ -1,27 +1,22 @@
 #ifndef print
 #define print
 #include "abin.h"
-#define MAX_HEIGHT 1000
-#define INFINITY 1048576
+#define ALT_MAX 1000
 
+int ladoEsquerdo[ALT_MAX];
+int ladoDireito[ALT_MAX];
+int print_next;
 typedef struct ArvBinBusca ArvBinPrint;
 
 struct ArvBinBusca {
     ArvBinPrint *esquerdo;
     ArvBinPrint *direito;
-
-    //length of the edge from this node to its children
-    int edge_length;
-    int height;
+    int comprimento;
+    int altura;
     int elemento;
-    //-1=I am left, 0=I am root, 1=right
-    int parent_dir;
-    char label[11];
+    int pai;
+    char impressao[11];
 };
-
-int lprofile[MAX_HEIGHT];
-int rprofile[MAX_HEIGHT];
-int print_next;
 
 void showTree(ArvBin *t);
 
@@ -29,13 +24,13 @@ ArvBinPrint *insere_ArvBinPrint_rec(ArvBin *t);
 
 ArvBinPrint *insere_ArvBinPrint(ArvBin *t);
 
-void free_ascii_tree(ArvBinPrint *node);
+void libera_ArvBinPrint(ArvBinPrint *no);
 
-void compute_profile(ArvBinPrint *node, int x, int y,char direction);
+void computa_Lados(ArvBinPrint *no, int x, int y,char direction);
 
-void filledge(ArvBinPrint *node);
+void preenche_borda(ArvBinPrint *no);
 
-void printLevel(ArvBinPrint *node, int x, int level) ;
+void desenhaLinha(ArvBinPrint *no, int x, int level) ;
 
 int MIN(int X, int Y);
 
