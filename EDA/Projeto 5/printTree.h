@@ -5,7 +5,7 @@
 
 int ladoEsquerdo[ALT_MAX];
 int ladoDireito[ALT_MAX];
-int print_next;
+int printa_prox;
 typedef struct ArvBinBusca ArvBinPrint;
 
 struct ArvBinBusca {

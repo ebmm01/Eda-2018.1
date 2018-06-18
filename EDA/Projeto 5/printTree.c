@@ -18,7 +18,7 @@ void showTree(ArvBin *t) {
         minX = MIN(minX, ladoEsquerdo[i]);
     }
     for (i = 0; i < raiz->altura; i++) {
-        print_next = 0;
+        printa_prox = 0;
         desenhaLinha(raiz, -minX, i);
         printf("\n");
     }
@@ -148,29 +148,29 @@ void desenhaLinha(ArvBinPrint *no, int x, int level) {
     if (no == NULL) return;
     esquerdo = (no->pai == -1);
     if (level == 0) {
-        for (i = 0; i < (x - print_next - ((no->elemento - esquerdo) / 2)); i++) {
+        for (i = 0; i < (x - printa_prox - ((no->elemento - esquerdo) / 2)); i++) {
             printf(" ");
         }
-        print_next += i;
+        printa_prox += i;
         printf("%s", no->impressao);
-        print_next += no->elemento;
+        printa_prox += no->elemento;
     }
     else if (no->comprimento >= level) {
         if (no->esquerdo != NULL) {
-            for (i = 0; i < (x - print_next - (level)); i++) {
+            for (i = 0; i < (x - printa_prox - (level)); i++) {
                 printf(" ");
             }
-            print_next += i;
+            printa_prox += i;
             printf("/");
-            print_next++;
+            printa_prox++;
         }
         if (no->direito != NULL) {
-            for (i = 0; i < (x - print_next + (level)); i++) {
+            for (i = 0; i < (x - printa_prox + (level)); i++) {
                 printf(" ");
             }
-            print_next += i;
+            printa_prox += i;
             printf("\\");
-            print_next++;
+            printa_prox++;
         }
     }
     else {

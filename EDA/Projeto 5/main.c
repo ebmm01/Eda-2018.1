@@ -20,24 +20,27 @@ int  main(int argc, char const *argv[]) {
     scanf("%d", &escolha);
     switch (escolha) {
       case 1:
+        system("clear");
         printf("Insira o nome do arquivo:\n\n");
         scanf("%s", nome);
         raiz = loadTreeFromFile(nome);
         printf("Arquivo aberto");
-        fflush(stdin);
         break;
 
       case 2:
+        system("clear");
         printf("Printando raiz\n\n");
         showTree(raiz);
         break;
 
       case 3:
+        system("clear");
         if(isFull(raiz)) printf("Árove cheia!!\n");
         else printf("Árvore não cheia.\n" );
         break;
 
       case 4:{
+        system("clear");
         int valor;
         printf("Insira o valor a ser pesquisado na Árvore\n\n");
         scanf("%d",&valor);
@@ -45,13 +48,14 @@ int  main(int argc, char const *argv[]) {
         break;
       }
       case 5:
-
+        system("clear");
         x = altura_ArvBin(raiz);
         if (x >=0) printf("\n\n A altura da árvore é: %d\n\n",x);
         else printf("\n\nRaiz nula.\n\n");
         break;
 
       case 6:{
+        system("clear");
         int valor = 0;
         printf("Insira o valor a ser removido");
         scanf("%d", &valor);
@@ -59,29 +63,36 @@ int  main(int argc, char const *argv[]) {
         break;
       }
       case 7:
+        system("clear");
         emOrdem_ArvBin(raiz);
         break;
 
       case 8:
+        system("clear");
         preOrdem_ArvBin(raiz);
         break;
 
       case 9:
+        system("clear");
         posOrdem_ArvBin(raiz);
         break;
 
       case 10:
+        system("clear");
         printf("NÂO IMPLEMENTADO");
         break;
 
       case 11:
+        system("clear");
         printf("SAINDO");
         libera_ArvBin(raiz);
         break;
 
       default:
-       menu();
+       system("clear");
        printf("Opção inválida; Tente novamente.\n");
+       printf("Pressione ENTER para continuar\n");
+       getchar();
 
     }
   }

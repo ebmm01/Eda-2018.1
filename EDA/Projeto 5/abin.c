@@ -49,7 +49,7 @@ int n_NOS(ArvBin *raiz){
 void preOrdem_ArvBin(ArvBin *raiz){
   if (raiz == NULL) return;
   if (*raiz != NULL){
-    printf("Valor: %d\n", (*raiz)->num);
+    printf("%d ", (*raiz)->num);
     preOrdem_ArvBin(&((*raiz)->esquerdo));
     preOrdem_ArvBin(&((*raiz)->direito));
   }
@@ -59,7 +59,7 @@ void emOrdem_ArvBin(ArvBin *raiz){
   if (raiz == NULL) return;
   if (*raiz != NULL){
     emOrdem_ArvBin(&((*raiz)->esquerdo));
-    printf("Valor: %d\n", (*raiz)->num);
+    printf("%d ", (*raiz)->num);
     emOrdem_ArvBin(&((*raiz)->direito));
   }
 }
@@ -69,7 +69,7 @@ void posOrdem_ArvBin(ArvBin *raiz){
   if (*raiz != NULL){
     posOrdem_ArvBin(&((*raiz)->esquerdo));
     posOrdem_ArvBin(&((*raiz)->direito));
-    printf("Valor: %d\n", (*raiz)->num);
+    printf("%d ", (*raiz)->num);
   }
 }
 
