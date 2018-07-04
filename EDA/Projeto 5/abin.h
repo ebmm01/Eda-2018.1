@@ -17,15 +17,15 @@ void libera_NO(struct NO* no);
 
 int estaVazia_ArvBin(ArvBin* raiz);
 
-int altura_ArvBin(ArvBin *raiz);
+int getHeight(ArvBin *raiz);
 
 int n_NOS(ArvBin *raiz);
 
-void preOrdem_ArvBin(ArvBin *raiz);
+void printPreOrder(ArvBin *raiz);
 
-void emOrdem_ArvBin(ArvBin *raiz);
+void printInOrder(ArvBin *raiz);
 
-void posOrdem_ArvBin(ArvBin *raiz);
+void printPostOrder(ArvBin *raiz);
 
 int  insere_ArvBin(ArvBin *raiz, int valor);
 
@@ -33,9 +33,14 @@ int remove_ArvBin(ArvBin *raiz, int valor);
 
 struct NO* remove_atual(struct NO *atual);
 
-int consulta_ArvBin(ArvBin *raiz, int valor);
+int searchValue(ArvBin *raiz, int valor);
+
+int isFull (ArvBin *raiz);
 
 ArvBin* loadTreeFromFile(char *name);
+
+void printElements(ArvBin *t);
+
 
 #endif
 /* Chamada das funções

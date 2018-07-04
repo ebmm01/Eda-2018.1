@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "abin.h"
 
 ArvBin* cria_ArvBin(){
@@ -27,10 +28,11 @@ int estaVazia_ArvBin(ArvBin* raiz){
     return (raiz == NULL || *raiz == NULL) ? 1 : 0;
 }
 
-int altura_ArvBin(ArvBin *raiz){
-  if (raiz == NULL || *raiz == NULL) return 0;
-  int lado_esquerdo = altura_ArvBin(&((*raiz)->esquerdo));
-  int lado_direito = altura_ArvBin(&((*raiz)->direito));
+int getHeight(ArvBin *raiz){
+  if (raiz == NULL) return 0;
+  if (*raiz == NULL) return -1;
+  int lado_esquerdo = getHeight(&((*raiz)->esquerdo));
+  int lado_direito = getHeight(&((*raiz)->direito));
   if (lado_esquerdo> lado_direito)
     return (lado_esquerdo + 1);
   else
@@ -39,35 +41,36 @@ int altura_ArvBin(ArvBin *raiz){
 
 int n_NOS(ArvBin *raiz){
   if (raiz == NULL || *raiz == NULL) return 0;
-  int lado_esquerdo = altura_ArvBin(&((*raiz)->esquerdo));
-  int lado_direito = altura_ArvBin(&((*raiz)->direito));
+  int lado_esquerdo = getHeight(&((*raiz)->esquerdo));
+  int lado_direito = getHeight(&((*raiz)->direito));
   return (lado_direito + lado_esquerdo + 1);
 }
 
-void preOrdem_ArvBin(ArvBin *raiz){
+
+void printPreOrder(ArvBin *raiz){
   if (raiz == NULL) return;
   if (*raiz != NULL){
-    printf("Valor: %d\n", (*raiz)->num);
-    preOrdem_ArvBin(&((*raiz)->esquerdo));
-    preOrdem_ArvBin(&((*raiz)->direito));
+    printf("%d ", (*raiz)->num);
+    printPreOrder(&((*raiz)->esquerdo));
+    printPreOrder(&((*raiz)->direito));
   }
 }
 
-void emOrdem_ArvBin(ArvBin *raiz){
+void printInOrder(ArvBin *raiz){
   if (raiz == NULL) return;
   if (*raiz != NULL){
-    emOrdem_ArvBin(&((*raiz)->esquerdo));
-    printf("Valor: %d\n", (*raiz)->num);
-    emOrdem_ArvBin(&((*raiz)->direito));
+    printInOrder(&((*raiz)->esquerdo));
+    printf("%d ", (*raiz)->num);
+    printInOrder(&((*raiz)->direito));
   }
 }
 
-void posOrdem_ArvBin(ArvBin *raiz){
+void printPostOrder(ArvBin *raiz){
   if (raiz == NULL) return;
   if (*raiz != NULL){
-    posOrdem_ArvBin(&((*raiz)->esquerdo));
-    posOrdem_ArvBin(&((*raiz)->direito));
-    printf("Valor: %d\n", (*raiz)->num);
+    printPostOrder(&((*raiz)->esquerdo));
+    printPostOrder(&((*raiz)->direito));
+    printf("%d ", (*raiz)->num);
   }
 }
 
@@ -116,6 +119,7 @@ int remove_ArvBin(ArvBin *raiz, int valor){
     if (valor > atual->num) atual = atual->direito;
     else atual = atual->esquerdo;
   }
+  printf("Valor não encontrado\n");
   return 1;
 }
 
@@ -141,18 +145,47 @@ struct NO* remove_atual(struct NO *atual){
   return no2;
 }
 
-int consulta_ArvBin(ArvBin *raiz, int valor){
+int searchValue(ArvBin *raiz, int valor){
   if (raiz==NULL) return 0;
+  int nivel=0;
   struct NO* atual = *raiz;
+  struct NO* ant = NULL;
+  struct NO* irmao = NULL;
   while(atual != NULL){
-    if(valor == atual ->num){
+    if(valor == atual->num){
+      printf("\n\nValor encontrado!\n");
+      printf("Nível do nó: %d\n",nivel );
+      printf("Valor do pai: %d\n", ant->num);
+      if (irmao != NULL) printf("Valor do irmão: %d\n", irmao->num);
+      else printf("Nó não tem irmao.\n\n");
       return 1;
-      //aqui outras coisas podem ser feitas.
     }
-    if(valor > atual->num) atual = atual->direito;
-    else atual = atual->esquerdo;
+    if(valor > atual->num){
+      ant = atual;
+      irmao = ant->esquerdo;
+      atual = atual->direito;
+      nivel++;
+    }
+    else{
+      ant = atual;
+      irmao = ant->direito;
+      atual = atual->esquerdo;
+      nivel++;
+    }
   }
+  printf("Valor não encontrado.\n" );
   return 0;
+}
+
+int isFull (ArvBin *raiz){
+  struct NO* atual = *raiz;
+    if (raiz == NULL)
+        return 1;
+    if (atual->esquerdo == NULL && atual->direito == NULL)
+        return 1;
+    if ((atual->esquerdo) && (atual->direito))
+        return (isFull(&atual->esquerdo) && isFull(&atual->direito));
+    return 0;
 }
 
 ArvBin* loadTreeFromFile(char *name){
@@ -172,12 +205,10 @@ ArvBin* loadTreeFromFile(char *name){
   for (int i=0;i<1;i++){
         for (int j=0;j<10;j++){
            fscanf(arquivo,"%d ", (num+j));
-           printf("%d\n", *(num+j));
            insere_ArvBin(raiz, *(num+j));
         }
   }
-
+  printf("Arquivo '%s' aberto com sucesso! \n",filename);
   free(num);
-
   return raiz;
 }
